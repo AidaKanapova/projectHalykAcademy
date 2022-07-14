@@ -1,0 +1,50 @@
+package kz.halykacademy.bookstore.DTO;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public class Author {
+
+    private int id;
+    private  String full_name;
+    private LocalDate date_of_birth;
+    private List<Book> books;
+
+    public Author(String full_name, LocalDate date_of_birth, List<Book> books) {
+        this.full_name = full_name;
+        this.date_of_birth = date_of_birth;
+        this.books = books;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
+    }
+
+    public void setDate_of_birth(LocalDate date_of_birth) {
+        this.date_of_birth = date_of_birth;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public LocalDate getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+}
