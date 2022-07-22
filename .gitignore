@@ -1,6 +1,9 @@
 ### Gradle ###
 .gradle
-/build/
+**/build/
+!src/**/build/
+
+gradle-app.setting
 # Package Files #
 *.jar
 *.war
@@ -8,6 +11,15 @@
 ### Java ###
 *.class
 
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+!gradle-wrapper.properties
+.gradletasknamecache
 *.idea
 *.iml
-.build

@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.DTO;
+package kz.halykacademy.bookstore.dto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,5 +46,15 @@ public class Author {
 
     public List<Book> getBooks() {
         return books;
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Author {");
+        sb.append("full name = ").append(full_name);
+        sb.append(", date of birth = ").append(date_of_birth);
+        sb.append(", books = ").append(books);
+        return sb.toString();
     }
 }

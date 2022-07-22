@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.DTO;
+package kz.halykacademy.bookstore.dto;
 
 import java.util.List;
 
@@ -36,4 +36,14 @@ public class Publisher {
     public List<Book> getBooks() {
         return books;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Publisher {");
+        sb.append("name= ").append(name);
+        sb.append(", books= ").append(books);
+
+        return sb.toString();
 }
+}
+

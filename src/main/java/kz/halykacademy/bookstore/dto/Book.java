@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.DTO;
+package kz.halykacademy.bookstore.dto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -75,5 +75,17 @@ public class Book {
 
     public LocalDate getRelease_year() {
         return release_year;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Book {");
+        sb.append("title = ").append(title);
+        sb.append(", price = ").append(price);
+        sb.append(", author = ").append(authors);
+        sb.append(", publisher = ").append(publishers);
+        sb.append(", page count = ").append(page_count);
+        sb.append(", year = ").append(release_year);
+        return sb.toString();
     }
 }
