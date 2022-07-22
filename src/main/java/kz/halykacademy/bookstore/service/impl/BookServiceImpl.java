@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Books createBook(Books book) {
-        return null;
+        return bookRepository.save(book);
     }
 
     @Override
