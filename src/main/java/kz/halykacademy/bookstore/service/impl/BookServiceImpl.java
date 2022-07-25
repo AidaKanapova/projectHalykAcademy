@@ -51,4 +51,9 @@ public class BookServiceImpl implements BookService {
 
         return deleteBook;
     }
+
+    @Override
+    public List<Books> findByTitle(String title) {
+        return (List<Books>) bookRepository.findByTitle(title);
+    }
 }

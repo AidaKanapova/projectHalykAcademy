@@ -12,5 +12,7 @@ public interface BookService {
     public Books updateBooks(Books book);
     public Books deleteBook(int bookId) throws Exception;
 
+    public  List<Books> findByTitle(String title);
+
 
 }
