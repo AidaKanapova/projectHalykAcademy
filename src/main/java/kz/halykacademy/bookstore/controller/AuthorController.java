@@ -1,21 +1,84 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.dto.Author;
-import kz.halykacademy.bookstore.provider.AuthorProvider;
+import kz.halykacademy.bookstore.entity.Author;
+import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.service.AuthorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
-public class AuthorController implements AuthorProvider {
+
+@RestController
+@RequestMapping("/authors")
+public class AuthorController  {
+
+    private final AuthorService authorService;
 
 
-    private static List<Author> authors = List.of(
-            new Author("Джек Лондон", LocalDate.of(1876, 1,12), Collections.emptyList()),
-            new Author("Харпер Ли", LocalDate.of(1926, 4,28), Collections.emptyList()));
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
 
-    @Override
-    public List<Author> getAll() {
-        return authors;
+    @GetMapping("/allAuthors")
+    public ResponseEntity<List<Author>> getAllAuthors() {
+        List<Author> authors = null;
+        try {
+            authors = authorService.getAllAuthors();
+        } catch (Exception ex) {
+            ex.getMessage();
+
+        }
+        return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+    }
+
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Author> getAuthorById(@PathVariable("id") long authorId) {
+        Author author = null;
+        try {
+            author = authorService.getAuthorById(authorId);
+        } catch (Exception ex) {
+            ex.getMessage();
+
+        }
+        return new ResponseEntity<Author>(author, HttpStatus.OK);
+    }
+
+    @PostMapping("/addAuthor")
+    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
+        Author authors = null;
+        try {
+           authors = authorService.addAuthor(author);
+        } catch (Exception ex) {
+            ex.getMessage();
+
+        }
+        return new ResponseEntity<Author>(authors, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteAuthor/{id}")
+    public ResponseEntity<Author> deleteAuthor(@PathVariable("id") long authorId) {
+        Author author = null;
+        try {
+            author = authorService.deleteAuthor(authorId);
+        } catch (Exception ex) {
+            ex.getMessage();
+
+        }
+        return new ResponseEntity<Author>(author, HttpStatus.OK);
+    }
+
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<List<Author>> findByName(@PathVariable("name") String name) {
+        List<Author> authors = null;
+        try {
+            authors = authorService.findByName(name);
+        } catch (Exception ex) {
+            ex.getMessage();
+
+        }
+        return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
     }
 }
+

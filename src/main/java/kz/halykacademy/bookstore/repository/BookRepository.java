@@ -15,6 +15,4 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
     @Query(value = "SELECT  u FROM Books u WHERE u.title  LIKE %?1% ")
     List<Books> findByTitle(String title);
 
-
-
 }
