@@ -8,9 +8,9 @@ public class Author {
     private int id;
     private  String full_name;
     private LocalDate date_of_birth;
-    private List<Book> books;
+    private List<BookDTO> books;
 
-    public Author(String full_name, LocalDate date_of_birth, List<Book> books) {
+    public Author(String full_name, LocalDate date_of_birth, List<BookDTO> books) {
         this.full_name = full_name;
         this.date_of_birth = date_of_birth;
         this.books = books;
@@ -28,7 +28,7 @@ public class Author {
         this.date_of_birth = date_of_birth;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(List<BookDTO> books) {
         this.books = books;
     }
 
@@ -44,7 +44,7 @@ public class Author {
         return date_of_birth;
     }
 
-    public List<Book> getBooks() {
+    public List<BookDTO> getBooks() {
         return books;
     }
 
