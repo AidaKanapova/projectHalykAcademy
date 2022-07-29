@@ -1,11 +1,17 @@
 package kz.halykacademy.bookstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kz.halykacademy.bookstore.dto.AuthorDTO;
+import kz.halykacademy.bookstore.dto.AuthorNameDTO;
+import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.BookNameDTO;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="author")
@@ -17,33 +23,62 @@ public class Author {
     @Column(name = "author_id")
     private  long authorId;
 
-    @Column(name = "fullName")
-    private  String fullName;
+    @Column(name = "full_name")
+    private  String full_name;
 
-    @Column(name = "dateOfBirth")
-    private LocalDate dateOfBirth;
+    @Column(name = "date_of_birth")
+    private LocalDate date_of_birth;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinTable(
             name = "author_book",
             joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
-    )
-    private List<Books> books;
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Books> books = new HashSet<>();
 
-    @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;
 
-    public Author() {
+
+    public AuthorNameDTO toAuthorDTO(){
+
+
+        return new AuthorNameDTO(
+
+                this.authorId,
+                this.full_name
+        );
+    }
+
+    public AuthorDTO toDTO(){
+
+        Set<BookNameDTO> books = Set.of();
+        if(this.books != null)
+            books = this.books.stream().map(Books::toBookDTO).collect(Collectors.toSet());
+
+        return new AuthorDTO(
+                this.authorId,
+                this.full_name,
+                this.date_of_birth,
+                books
+        );
+    }
+
+
+   /* @Column(name = "deleted")
+    private boolean deleted = Boolean.FALSE;*/
+
+   public Author() {
         super();
     }
-    public Author(long authorId, String fullName, LocalDate dateOfBirth, List<Books> books) {
+    public Author(long authorId, String fullName, LocalDate dateOfBirth, Set<Books> books) {
         super();
         this.authorId = authorId;
-        this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
+        this.full_name = fullName;
+        this.date_of_birth = dateOfBirth;
         this.books = books;
     }
 
@@ -51,39 +86,46 @@ public class Author {
         this.authorId = authorId;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDate_of_birth(LocalDate date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(Set<Books> books) {
         this.books = books;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
 
     public long getAuthorId() {
         return authorId;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFull_name() {
+        return full_name;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getDate_of_birth() {
+        return date_of_birth;
     }
 
-    public List<Books> getBooks() {
+    public Set<Books> getBooks() {
         return books;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+
+    public void addBook(Books book){
+        books.add(book);
+        book.getAuthors().add(this);
     }
+
+    public void removeBook(Books book){
+        this.books.remove(book);
+        book.getAuthors().remove(this);
+    }
+
 }
+
+

@@ -1,9 +1,9 @@
 package kz.halykacademy.bookstore.provider;
 
-import kz.halykacademy.bookstore.dto.Publisher;
+import kz.halykacademy.bookstore.dto.PublisherDTO;
 
 import java.util.List;
 
 public interface PublisherProvider {
-    List<Publisher> getAll();
+    List<PublisherDTO> getAll();
 }

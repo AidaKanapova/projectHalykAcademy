@@ -1,12 +1,14 @@
 package kz.halykacademy.bookstore.entity;
 
 
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.PublisherDTO;
 
 import javax.persistence.*;
-import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "publisher")
@@ -21,15 +23,22 @@ public class Publisher {
     @Column(name = "name")
     private  String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch =  FetchType.EAGER,
-    mappedBy = "publisher")
-    @Column(name = "books")
-    private List<Books> books;
 
-    @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;
+    @OneToMany(mappedBy = "publisher")
+    private List<Books> books = new ArrayList<>();
 
-    public Publisher() {
+  /*  @Column(name = "deleted")
+    private boolean deleted = Boolean.FALSE;*/
+
+
+    public PublisherDTO toDTO(){
+        return  new PublisherDTO(
+                this.publisherId,
+                this.name
+        );
+    }
+
+   public Publisher() {
         super();
     }
 
@@ -52,9 +61,11 @@ public class Publisher {
         this.books = books;
     }
 
+/*
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+*/
 
     public long getPublisherId() {
         return publisherId;
@@ -68,7 +79,9 @@ public class Publisher {
         return books;
     }
 
+/*
     public boolean isDeleted() {
         return deleted;
     }
+*/
 }

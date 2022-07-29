@@ -1,12 +1,19 @@
 package kz.halykacademy.bookstore.controller;
 
+import kz.halykacademy.bookstore.dto.AuthorDTO;
+import kz.halykacademy.bookstore.dto.AuthorNameDTO;
+import kz.halykacademy.bookstore.dto.SaveAuthorDTO;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.repository.AuthorRepository;
+import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.service.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 
@@ -17,48 +24,34 @@ public class AuthorController  {
     private final AuthorService authorService;
 
 
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }
 
     @GetMapping("/allAuthors")
-    public ResponseEntity<List<Author>> getAllAuthors() {
-        List<Author> authors = null;
-        try {
-            authors = authorService.getAllAuthors();
-        } catch (Exception ex) {
-            ex.getMessage();
-
-        }
-        return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+    public List<AuthorDTO> findAll(){
+        return authorService.findAll();
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable("id") long authorId) {
-        Author author = null;
-        try {
-            author = authorService.getAuthorById(authorId);
-        } catch (Exception ex) {
-            ex.getMessage();
-
-        }
-        return new ResponseEntity<Author>(author, HttpStatus.OK);
+    public AuthorDTO getAuthorById(@PathVariable("id") long authorId) throws Throwable {
+        return authorService.getAuthorById(authorId);
     }
 
     @PostMapping("/addAuthor")
-    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
-        Author authors = null;
-        try {
-           authors = authorService.addAuthor(author);
-        } catch (Exception ex) {
-            ex.getMessage();
-
-        }
-        return new ResponseEntity<Author>(authors, HttpStatus.OK);
+    public AuthorDTO addAuthor(@RequestBody SaveAuthorDTO author) {
+        return  authorService.addAuthor(author);
     }
 
     @DeleteMapping("/deleteAuthor/{id}")
-    public ResponseEntity<Author> deleteAuthor(@PathVariable("id") long authorId) {
+    public Author deleteAuthor(@PathVariable("id") long authorId) {
         Author author = null;
         try {
             author = authorService.deleteAuthor(authorId);
@@ -66,7 +59,7 @@ public class AuthorController  {
             ex.getMessage();
 
         }
-        return new ResponseEntity<Author>(author, HttpStatus.OK);
+        return author;
     }
 
     @GetMapping("/findByName/{name}")
@@ -79,6 +72,15 @@ public class AuthorController  {
 
         }
         return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+
     }
+
+    @PutMapping("/{authorId}/books/{bookId}")
+    Author author(@PathVariable long authorId, @PathVariable long bookId){
+        Author author = authorRepository.findById(authorId).get();
+        Books book = bookRepository.findById(bookId).get();
+        return authorRepository.save(author);
+    }
+
 }
 

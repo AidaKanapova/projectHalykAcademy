@@ -1,24 +1,30 @@
 package kz.halykacademy.bookstore.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kz.halykacademy.bookstore.dto.AuthorDTO;
+import kz.halykacademy.bookstore.dto.AuthorNameDTO;
+import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.BookNameDTO;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "book")
-/*
-@SQLDelete(sql="UPDATE book SET deleted = true WHERE book_id = ?")
-*/
 
 public class Books {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private int bookId;
+    private long bookId;
 
     @Column(name = "title")
     private  String title;
@@ -26,16 +32,11 @@ public class Books {
     @Column(name = "price")
     private  int price;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable( name = "author_book",
-                joinColumns = @JoinColumn(name="book_id"),
-                inverseJoinColumns = @JoinColumn(name = "author_id"),
-                foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-                inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
-    )
-    private List<Author> authors;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "books")
+    private Set<Author> authors = new HashSet<>();
+
+    @ManyToOne
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
@@ -45,9 +46,40 @@ public class Books {
     @Column(name = "release_year")
     private LocalDate release_year;
 
-    @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;
+    @ManyToMany
+    @JoinTable(
+            name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private List<Genre> genres;
 
+   /* @Column(name = "deleted")
+    private boolean deleted = Boolean.FALSE;*/
+
+    public BookNameDTO toBookDTO(){
+        return new BookNameDTO(
+                this.bookId,
+                this.title
+        );
+    }
+
+    public BookDTO toDTO(){
+
+        Set<AuthorNameDTO> authors = Set.of();
+        if(this.authors != null)
+            authors = this.authors.stream().map(Author::toAuthorDTO).collect(Collectors.toSet());
+
+        return new BookDTO(
+                this.bookId,
+                this.title,
+                this.price,
+                authors,
+                this.publisher.getName(),
+                this.page_count,
+                this.release_year
+
+        );
+    }
 
 
 
@@ -55,8 +87,7 @@ public class Books {
         super();
     }
 
-    public Books(int bookId, String title, int price, List<Author> authors, Publisher publisher, int page_count, LocalDate release_year) {
-        super();
+    public Books(long bookId, String title, int price, Set<Author> authors, Publisher publisher, int page_count, LocalDate release_year) {
         this.bookId = bookId;
         this.title = title;
         this.price = price;
@@ -66,7 +97,7 @@ public class Books {
         this.release_year = release_year;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
@@ -78,7 +109,7 @@ public class Books {
         this.price = price;
     }
 
-    public void setAuthor(List<Author> authors) {
+    public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
 
@@ -94,11 +125,11 @@ public class Books {
         this.release_year = release_year;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
-    public int getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
@@ -110,7 +141,7 @@ public class Books {
         return price;
     }
 
-    public List<Author> getAuthor() {
+    public Set<Author> getAuthors() {
         return authors;
     }
 
@@ -126,11 +157,9 @@ public class Books {
         return release_year;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public List<Genre> getGenres() {
+        return genres;
     }
-
-
 
     @Override
     public String toString() {
@@ -138,12 +167,11 @@ public class Books {
                 "bookId=" + bookId +
                 ", title='" + title + '\'' +
                 ", price=" + price +
-                ", author='" + authors + '\'' +
-                ", publisher='" + publisher + '\'' +
+                ", authors=" + authors +
+                ", publisher=" + publisher +
                 ", page_count=" + page_count +
-                ", release_year=" + release_year + '\''+
-                ", deleted=" + deleted +
-
+                ", release_year=" + release_year +
+                ", genres=" + genres +
                 '}';
     }
 }

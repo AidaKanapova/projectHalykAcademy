@@ -1,60 +1,77 @@
 package kz.halykacademy.bookstore.service.impl;
 
+import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.entity.Publisher;
+import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.BookRepository;
+import kz.halykacademy.bookstore.repository.PublisherRepository;
 import kz.halykacademy.bookstore.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private  final PublisherRepository publisherRepository;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
 
 
     @Override
-    public List<Books> getAllBooks() {
-        return (List<Books>) bookRepository.findAll();
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll()
+                .stream()
+                .map(Books::toDTO)
+                .toList();
     }
 
     @Override
-    public Books getBookById(int bookId) {
-        return bookRepository.findById(bookId).orElse(null);
+    public BookDTO getBookById(long bookId) throws Throwable {
+        return bookRepository.findById(bookId)
+                .map(Books::toDTO)
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Book %s not found".formatted(bookId)));
+    }
+    @Override
+    public BookDTO createBook(SaveBookDTO book) throws  Throwable {
+        Publisher publisher = publisherRepository.findById(book.getPublisherId())
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Cannot persist book %s".formatted(book.getBookId())));
+
+        Books saved = bookRepository.save(
+                new Books(
+                        book.getBookId(),
+                        book.getTitle(),
+                        book.getPrice(),
+                        null,
+                        publisher,
+                        book.getPage_count(),
+                        book.getRelease_year()
+                )
+        );
+        return  saved.toDTO();
     }
 
-    @Override
-    public Books createBook(Books book) {
-        return bookRepository.save(book);
-    }
-
-    @Override
+   /* @Override
     public Books updateBooks(Books book) {
         return bookRepository.save(book);
     }
-
+*/
     @Override
-    public Books deleteBook(int bookId) throws Exception {
-        Books deleteBook = null;
-        try {
-            deleteBook = bookRepository.findById(bookId).orElse(null);
-            if (deleteBook == null) {
-                throw new Exception("book not available");
-            } else {
-                bookRepository.deleteById(bookId);
-            }
-        } catch (Exception ex) {
-            throw ex;
-        }
-
-
-        return deleteBook;
+    public void deleteBook(long bookId) throws Exception {
+        bookRepository.deleteById(bookId);
     }
+
 
     @Override
     public List<Books> findByTitle(String title) {

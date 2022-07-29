@@ -1,44 +1,51 @@
 package kz.halykacademy.bookstore.dto;
 
+import kz.halykacademy.bookstore.entity.Publisher;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
-public class Book {
-    private  int id;
-    private  double price;
-    private List<Author> authors;
-    private List<Publisher> publishers;
+public class BookDTO {
+    private long bookId;
     private String title;
+    private  int price;
+    private Set<AuthorNameDTO> authors;
+    private String publisher;
     private  int page_count;
     private LocalDate release_year;
 
-    public Book(double price, List<Author> authors, List<Publisher> publishers, String title, int page_count, LocalDate release_year) {
+    public BookDTO(){super();}
+
+
+    public BookDTO(long bookId, String title, int price, Set<AuthorNameDTO> authors, String publisher, int page_count, LocalDate release_year) {
+        this.bookId = bookId;
+        this.title = title;
         this.price = price;
         this.authors = authors;
-        this.publishers = publishers;
-        this.title = title;
+        this.publisher = publisher;
         this.page_count = page_count;
         this.release_year = release_year;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
-    }
-
-    public void setPublishers(List<Publisher> publishers) {
-        this.publishers = publishers;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBookId(long bookId) {
+        this.bookId = bookId;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setAuthors(Set<AuthorNameDTO> authors) {
+        this.authors = authors;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
     public void setPage_count(int page_count) {
@@ -49,24 +56,24 @@ public class Book {
         this.release_year = release_year;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public List<Publisher> getPublishers() {
-        return publishers;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public double getPrice() {
-        return price;
+    public long getBookId() {
+        return bookId;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public Set<AuthorNameDTO> getAuthors() {
+        return authors;
+    }
+
+    public String getPublisher() {
+        return publisher;
     }
 
     public int getPage_count() {
@@ -83,7 +90,7 @@ public class Book {
         sb.append("title = ").append(title);
         sb.append(", price = ").append(price);
         sb.append(", author = ").append(authors);
-        sb.append(", publisher = ").append(publishers);
+        sb.append(", publisher = ").append(publisher);
         sb.append(", page count = ").append(page_count);
         sb.append(", year = ").append(release_year);
         return sb.toString();
