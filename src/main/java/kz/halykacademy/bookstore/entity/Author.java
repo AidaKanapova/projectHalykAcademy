@@ -39,8 +39,7 @@ public class Author {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Books> books = new HashSet<>();
 
-    @OneToMany
-    private List<Genre> genres = new ArrayList<>();
+
 
 
     /*@Query(value = "select g from Author_book a join Book_genre g on a.book_id = g.book_id where a.author_id = ?1 ")
@@ -94,17 +93,14 @@ public class Author {
    public Author() {
         super();
     }
-    public Author(long authorId, String fullName, LocalDate dateOfBirth, Set<Books> books, List<Genre> genres) {
+    public Author(long authorId, String fullName, LocalDate dateOfBirth, Set<Books> books) {
         this.authorId = authorId;
         this.full_name = fullName;
         this.date_of_birth = dateOfBirth;
         this.books = books;
-        this.genres= genres;
+
     }
 
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
-    }
 
     public void setAuthorId(long authorId) {
         this.authorId = authorId;
@@ -123,9 +119,6 @@ public class Author {
     }
 
 
-    public List<Genre> getGenres() {
-        return genres;
-    }
 
     public long getAuthorId() {
         return authorId;

@@ -54,8 +54,8 @@ public class AuthorServiceImpl implements AuthorService {
                         author.getAuthorId(),
                         author.getFull_name(),
                         author.getDate_of_birth(),
-                        null,
                         null
+
                 )
         );
         return  saved.toDTO();
