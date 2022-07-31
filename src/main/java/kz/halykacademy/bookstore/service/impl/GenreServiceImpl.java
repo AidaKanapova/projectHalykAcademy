@@ -1,12 +1,17 @@
 package kz.halykacademy.bookstore.service.impl;
 
+import kz.halykacademy.bookstore.dto.GenreDTO;
+import kz.halykacademy.bookstore.dto.SaveGenreDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Genre;
+import kz.halykacademy.bookstore.entity.Publisher;
+import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.GenreRepository;
 import kz.halykacademy.bookstore.service.GenreService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -17,39 +22,37 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<Genre> getAllGenre() {
-        return genreRepository.findAll();
+    public List<GenreDTO> getAllGenre() {
+        return genreRepository.findAll()
+                .stream()
+                .map(Genre::toDTO)
+                .toList();
     }
 
     @Override
-    public Genre getGenreById(long genreId) {
-        return genreRepository.findById(genreId).orElse(null);
+    public GenreDTO getGenreById(long genreId) throws Throwable {
+        return genreRepository.findById(genreId)
+                .map(Genre::toDTO)
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Genre %s not found".formatted(genreId)));
     }
 
     @Override
-    public Genre addGenre(Genre genre) {
-            return genreRepository.save(genre);
+    public GenreDTO addGenre(SaveGenreDTO genre) {
+        Genre saved = genreRepository.save(
+                new Genre(
+                        genre.getGenre_id(),
+                        genre.getGenre_name(),
+                        null
+                )
+        );
+        return  saved.toDTO();
     }
 
-    @Override
-    public Genre updateGenre(Genre genre) {
-        return genreRepository.save(genre);
-    }
 
     @Override
-    public Genre deleteGenre(long genreId) throws Exception {
-        Genre deleteGenre = null;
-        try {
-            deleteGenre = genreRepository.findById(genreId).orElse(null);
-            if (deleteGenre == null) {
-                throw new Exception("book not available");
-            } else {
-                genreRepository.deleteById(genreId);
-            }
-        } catch (Exception ex) {
-            throw ex;
-        }
+    public void deleteGenre(long genreId) throws Exception {
+        genreRepository.deleteById(genreId);
 
-        return deleteGenre;
     }
 }

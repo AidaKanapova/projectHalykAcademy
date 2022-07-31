@@ -9,23 +9,30 @@ import java.util.Set;
 public class BookDTO {
     private long bookId;
     private String title;
+    public Set<GenreNameDTO> genreNameDTOS;
     private  int price;
     private Set<AuthorNameDTO> authors;
     private String publisher;
+
     private  int page_count;
     private LocalDate release_year;
 
     public BookDTO(){super();}
 
 
-    public BookDTO(long bookId, String title, int price, Set<AuthorNameDTO> authors, String publisher, int page_count, LocalDate release_year) {
+    public BookDTO(long bookId, String title, Set<GenreNameDTO> genreNameDTOS, int price, Set<AuthorNameDTO> authors, String publisher, int page_count, LocalDate release_year) {
         this.bookId = bookId;
         this.title = title;
+        this.genreNameDTOS = genreNameDTOS;
         this.price = price;
         this.authors = authors;
         this.publisher = publisher;
         this.page_count = page_count;
         this.release_year = release_year;
+    }
+
+    public void setGenreNameDTOS(Set<GenreNameDTO> genreNameDTOS) {
+        this.genreNameDTOS = genreNameDTOS;
     }
 
     public void setBookId(long bookId) {
@@ -56,6 +63,10 @@ public class BookDTO {
         this.release_year = release_year;
     }
 
+    public Set<GenreNameDTO> getGenreNameDTOS() {
+        return genreNameDTOS;
+    }
+
     public long getBookId() {
         return bookId;
     }
@@ -79,6 +90,8 @@ public class BookDTO {
     public int getPage_count() {
         return page_count;
     }
+
+
 
     public LocalDate getRelease_year() {
         return release_year;

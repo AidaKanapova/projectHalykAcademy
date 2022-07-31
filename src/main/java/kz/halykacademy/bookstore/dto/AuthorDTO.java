@@ -25,6 +25,7 @@ public class AuthorDTO {
 
 
 
+
     public void setAuthorId(long authorId) {
         this.authorId = authorId;
     }
@@ -41,6 +42,7 @@ public class AuthorDTO {
     public void setBooks(Set<BookNameDTO> books) {
         this.books = books;
     }
+
 
 
     public long getAuthorId() {

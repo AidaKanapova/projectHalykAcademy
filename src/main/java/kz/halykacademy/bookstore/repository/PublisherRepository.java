@@ -1,5 +1,7 @@
 package kz.halykacademy.bookstore.repository;
 
+import kz.halykacademy.bookstore.dto.AuthorDTO;
+import kz.halykacademy.bookstore.dto.AuthorGenreDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Publisher;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +14,7 @@ import java.util.List;
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
     @Query(value = "SELECT  u FROM Publisher u WHERE u.name  LIKE %?1% ")
     List<Publisher> findByName(String name);
+
+    List<AuthorGenreDTO> getGenreList(AuthorDTO authorDTO) ;
 
 }

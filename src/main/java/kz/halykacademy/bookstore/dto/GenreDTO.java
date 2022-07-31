@@ -1,28 +1,34 @@
 package kz.halykacademy.bookstore.dto;
 
 import java.util.List;
+import java.util.Set;
 
 public class GenreDTO {
 
     private long genre_id;
     private String genre_name;
-    private List<AuthorDTO> authorDTOS;
-    private List<BookDTO> bookDTOS;
+    private Set<BookNameDTO> bookDTOS;
 
-    public GenreDTO(){super();}
+    public GenreDTO() {
+        super();
+    }
 
-    public GenreDTO(String genre_name, List<AuthorDTO> authorDTOS, List<BookDTO> bookDTOS) {
+    public GenreDTO(long genre_id, String genre_name, Set<BookNameDTO> bookDTOS) {
+        this.genre_id = genre_id;
         this.genre_name = genre_name;
-        this.authorDTOS = authorDTOS;
         this.bookDTOS = bookDTOS;
     }
 
-    public List<BookDTO> getBookDTOS() {
-        return bookDTOS;
+    public void setGenre_id(long genre_id) {
+        this.genre_id = genre_id;
     }
 
-    public List<AuthorDTO> getAuthorDTOS() {
-        return authorDTOS;
+    public void setGenre_name(String genre_name) {
+        this.genre_name = genre_name;
+    }
+
+    public void setBookDTOS(Set<BookNameDTO> bookDTOS) {
+        this.bookDTOS = bookDTOS;
     }
 
     public long getGenre_id() {
@@ -33,19 +39,7 @@ public class GenreDTO {
         return genre_name;
     }
 
-    public void setAuthorDTOS(List<AuthorDTO> authorDTOS) {
-        this.authorDTOS = authorDTOS;
-    }
-
-    public void setBookDTOS(List<BookDTO> bookDTOS) {
-        this.bookDTOS = bookDTOS;
-    }
-
-    public void setGenre_id(long genre_id) {
-        this.genre_id = genre_id;
-    }
-
-    public void setGenre_name(String genre_name) {
-        this.genre_name = genre_name;
+    public Set<BookNameDTO> getBookDTOS() {
+        return bookDTOS;
     }
 }

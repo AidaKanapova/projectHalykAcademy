@@ -2,12 +2,12 @@ package kz.halykacademy.bookstore.controller;
 
 
 import kz.halykacademy.bookstore.dto.GenreDTO;
+import kz.halykacademy.bookstore.dto.SaveGenreDTO;
 import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.service.GenreService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-/*
 
 @RestController
 @RequestMapping("/genres")
@@ -22,50 +22,28 @@ public class GenreController {
 
     @GetMapping("/allGenres")
     public List<GenreDTO> getAllGenres() {
-        List<Genre> genres  = null;
-        try {
-            genres = genreService.getAllGenre();
-        } catch (Exception ex) {
-            ex.getMessage();
+        return genreService.getAllGenre();
 
-        }
-        return GenreMapper.INSTANCE.toListDTO(genres);
     }
 
     @GetMapping("/getById/{id}")
-    public GenreDTO getGenreById(@PathVariable("id") long genreId) {
-        Genre genre = null;
-        try {
-            genre = genreService.getGenreById(genreId);
-        } catch (Exception ex) {
-            ex.getMessage();
-        }
-        return GenreMapper.INSTANCE.toDTO(genre);
+    public GenreDTO getGenreById(@PathVariable("id") long genreId) throws Throwable {
+        return genreService.getGenreById(genreId);
+
     }
 
     @PostMapping("/addGenre")
-    public GenreDTO addGenre(@RequestBody Genre genre) {
-        Genre genre1 = null;
-        try {
-            genre1 = genreService.addGenre(genre);
-        } catch (Exception ex) {
-            ex.getMessage();
+    public GenreDTO addGenre(@RequestBody SaveGenreDTO genre) {
+        return genreService.addGenre(genre);
 
-        }
-        return GenreMapper.INSTANCE.toDTO(genre1);
     }
 
     @DeleteMapping("/delete/{id}")
-    public GenreDTO deleteGenre(@PathVariable("id") long genreId) {
-        Genre genre = null;
-        try {
-            genre = genreService.deleteGenre(genreId);
-        } catch (Exception ex) {
-            ex.getMessage();
+    public void deleteGenre(@PathVariable("id") long genreId) throws Exception {
+        genreService.deleteGenre(genreId);
 
-        }
-        return GenreMapper.INSTANCE.toDTO(genre);
     }
-
 }
-*/
+
+
+

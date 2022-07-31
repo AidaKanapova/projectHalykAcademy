@@ -1,8 +1,6 @@
 package kz.halykacademy.bookstore.service;
 
-import kz.halykacademy.bookstore.dto.AuthorDTO;
-import kz.halykacademy.bookstore.dto.AuthorNameDTO;
-import kz.halykacademy.bookstore.dto.SaveAuthorDTO;
+import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import org.springframework.data.domain.Page;
@@ -20,4 +18,13 @@ public interface AuthorService {
     public Author deleteAuthor(long authorId) throws Exception;
 
     public  List<Author> findByName(String name);
+
+/*
+    public List<GenreNameDTO> getGenreList(long id);
+*/
+
+/*
+    public  List<AuthorGenreDTO> getGenreList(GenreNameDTO genre);
+*/
 }
+

@@ -52,6 +52,7 @@ public class BookServiceImpl implements BookService {
                 new Books(
                         book.getBookId(),
                         book.getTitle(),
+                        null,
                         book.getPrice(),
                         null,
                         publisher,

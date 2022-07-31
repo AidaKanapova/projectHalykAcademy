@@ -1,21 +1,13 @@
 package kz.halykacademy.bookstore.service.impl;
 
-import kz.halykacademy.bookstore.dto.AuthorDTO;
-import kz.halykacademy.bookstore.dto.AuthorNameDTO;
-import kz.halykacademy.bookstore.dto.SaveAuthorDTO;
+import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
-import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
+import kz.halykacademy.bookstore.repository.GenreRepository;
 import kz.halykacademy.bookstore.service.AuthorService;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.spi.MatchingStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -25,8 +17,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
+    private final GenreRepository genreRepository;
+
+    public AuthorServiceImpl(AuthorRepository authorRepository, GenreRepository genreRepository) {
         this.authorRepository = authorRepository;
+        this.genreRepository = genreRepository;
     }
 
 
@@ -59,6 +54,7 @@ public class AuthorServiceImpl implements AuthorService {
                         author.getAuthorId(),
                         author.getFull_name(),
                         author.getDate_of_birth(),
+                        null,
                         null
                 )
         );
@@ -93,4 +89,20 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findByName(String name) {
         return (List<Author>) authorRepository.findByName(name);
     }
+
+  /*  @Override
+    public List<GenreNameDTO> getGenreList(long id) {
+         return  null;
+    }
+*/
+   /* @Override
+    public List<AuthorGenreDTO> getGenreList(GenreDTO genre) {
+        return genreRepository = genreRepository.findById()
+
+        return authorRepository.findById(authorId)
+                .map(Author::toDTO)
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Author %s not found".formatted(authorId)));
+        findById(book.getPublisherId())
+    }*/
 }
