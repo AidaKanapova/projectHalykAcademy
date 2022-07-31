@@ -1,34 +1,22 @@
-package kz.halykacademy.bookstore.entity;
+package kz.halykacademy.bookstore.dto;
 
+public class UserDTO {
 
-import kz.halykacademy.bookstore.dto.UserDTO;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name="users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
-
-
     private  String login;
     private String password;
     private  String role;
     private boolean blocked;
 
-    public UserDTO userDTO(){
-        return  new UserDTO(
-                this.user_id,
-                this.login,
-                this.password,
-                this.role,
-                this.blocked
-        );
-    }
+    public UserDTO(){super();}
 
+    public UserDTO(Long user_id, String login, String password, String role, boolean blocked) {
+        this.user_id = user_id;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.blocked = blocked;
+    }
 
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
@@ -68,15 +56,5 @@ public class User {
 
     public boolean isBlocked() {
         return blocked;
-    }
-
-    public  User(){super();}
-
-    public User(Long user_id, String login, String password, String role, boolean blocked) {
-        this.user_id = user_id;
-        this.login = login;
-        this.password = password;
-        this.role = role;
-        this.blocked = blocked;
     }
 }
