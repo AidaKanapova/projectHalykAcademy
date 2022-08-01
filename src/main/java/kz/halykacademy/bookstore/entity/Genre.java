@@ -40,9 +40,11 @@ public class Genre {
     public GenreNameDTO toGenreDTO(){
         return new GenreNameDTO(
 
+
                this.getGenre_name()
         );
     }
+
 
     public void setGenre_id(long genre_id) {
         this.genre_id = genre_id;

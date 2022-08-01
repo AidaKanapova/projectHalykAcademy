@@ -2,8 +2,11 @@ package kz.halykacademy.bookstore.entity;
 
 
 import kz.halykacademy.bookstore.dto.UserDTO;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -16,6 +19,10 @@ public class User {
 
     private  String login;
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> order = new ArrayList<>();
+
     private  String role;
     private boolean blocked;
 

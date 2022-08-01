@@ -52,6 +52,8 @@ public class Books {
 
 
 
+
+
    /* @Column(name = "deleted")
     private boolean deleted = Boolean.FALSE;*/
 
@@ -86,7 +88,7 @@ public class Books {
         );
     }
 
-    public  BookGenreDto genreDto(){
+   /* public  BookGenreDto genreDto(){
         Set<GenreNameDTO> genreNameDTOS = Set.of();
         if(this.genres != null)
             genreNameDTOS = this.genres.stream().map(Genre::toGenreDTO).collect(Collectors.toSet());
@@ -95,7 +97,7 @@ public class Books {
                 genreNameDTOS
         );
 
-    }
+    }*/
 
 
 
@@ -178,17 +180,5 @@ public class Books {
         return genres;
     }
 
-    @Override
-    public String toString() {
-        return "Books{" +
-                "bookId=" + bookId +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                ", authors=" + authors +
-                ", publisher=" + publisher +
-                ", page_count=" + page_count +
-                ", release_year=" + release_year +
-                ", genres=" + genres +
-                '}';
-    }
+
 }

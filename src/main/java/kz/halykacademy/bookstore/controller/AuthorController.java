@@ -5,6 +5,7 @@ import kz.halykacademy.bookstore.dto.AuthorNameDTO;
 import kz.halykacademy.bookstore.dto.SaveAuthorDTO;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.entity.Order;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.service.AuthorService;
@@ -81,6 +82,8 @@ public class AuthorController  {
         Books book = bookRepository.findById(bookId).get();
         return authorRepository.save(author);
     }
+
+
 
 }
 

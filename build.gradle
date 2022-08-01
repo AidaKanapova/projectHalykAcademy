@@ -38,9 +38,10 @@ dependencies {
 */
 
 
-/*
+
+
        implementation 'org.hibernate:hibernate-entitymanager:5.2.3.Final'
-*/
+
 
 
 /*
