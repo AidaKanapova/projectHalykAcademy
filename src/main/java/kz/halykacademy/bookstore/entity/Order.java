@@ -4,10 +4,15 @@ package kz.halykacademy.bookstore.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.dto.BookNameDTO;
 import kz.halykacademy.bookstore.dto.OrderDTO;
+import kz.halykacademy.bookstore.errors.CustomExceptionHandler;
+import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
+import org.apache.catalina.connector.Response;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -123,7 +128,23 @@ public class Order {
     }
 
     public void addBook(Books addBooks) {
-        books.add(addBooks);
-    }
+
+            List<Integer> sum = List.of();
+            if (this.books != null)
+                sum = this.books.stream().map(Books::getPrice).collect(Collectors.toList());
+            int lastSum = sum.stream().mapToInt(a -> a).sum();
+            int newSum = lastSum + addBooks.getPrice();
+
+            if (newSum < 10000) {
+                books.add(addBooks);
+            }else {
+                throw new IllegalArgumentException("Overprice");
+
+            }
+        }
 }
+
+
+
+
 

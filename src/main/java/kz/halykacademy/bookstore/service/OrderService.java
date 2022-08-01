@@ -15,4 +15,5 @@ public interface OrderService {
     public void updateOrder(Order order);
 
     public void deleteOrder(long orderId) throws Exception;
+
 }
