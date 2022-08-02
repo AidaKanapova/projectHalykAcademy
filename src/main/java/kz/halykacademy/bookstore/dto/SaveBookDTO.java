@@ -6,22 +6,25 @@ import java.util.List;
 public class SaveBookDTO {
     private long bookId;
     private String title;
-    private  int price;
+    private int price;
     private long publisherId;
-    private  int page_count;
+    private int page_count;
     private LocalDate release_year;
+    private boolean deleted;
 
 
+    public SaveBookDTO() {
+        super();
+    }
 
-    public SaveBookDTO(){super();}
-
-    public SaveBookDTO(long bookId, String title, int price, long publisherId, int page_count, LocalDate release_year) {
+    public SaveBookDTO(long bookId, String title, int price, long publisherId, int page_count, LocalDate release_year, boolean deleted) {
         this.bookId = bookId;
         this.title = title;
         this.price = price;
         this.publisherId = publisherId;
         this.page_count = page_count;
         this.release_year = release_year;
+        this.deleted = deleted;
     }
 
     public void setBookId(long bookId) {
@@ -48,6 +51,10 @@ public class SaveBookDTO {
         this.release_year = release_year;
     }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public long getBookId() {
         return bookId;
     }
@@ -71,4 +78,9 @@ public class SaveBookDTO {
     public LocalDate getRelease_year() {
         return release_year;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
 }
+

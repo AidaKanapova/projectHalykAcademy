@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public class BookDTO {
-    private long bookId;
+    private Long bookId;
     private String title;
     public Set<GenreNameDTO> genreNameDTOS;
     private  int price;
@@ -16,11 +16,12 @@ public class BookDTO {
 
     private  int page_count;
     private LocalDate release_year;
+    private boolean deleted;
 
     public BookDTO(){super();}
 
 
-    public BookDTO(long bookId, String title, Set<GenreNameDTO> genreNameDTOS, int price, Set<AuthorNameDTO> authors, String publisher, int page_count, LocalDate release_year) {
+    public BookDTO(long bookId, String title, Set<GenreNameDTO> genreNameDTOS, int price, Set<AuthorNameDTO> authors, String publisher, int page_count, LocalDate release_year, boolean deleted) {
         this.bookId = bookId;
         this.title = title;
         this.genreNameDTOS = genreNameDTOS;
@@ -29,10 +30,7 @@ public class BookDTO {
         this.publisher = publisher;
         this.page_count = page_count;
         this.release_year = release_year;
-    }
-
-    public void setGenreNameDTOS(Set<GenreNameDTO> genreNameDTOS) {
-        this.genreNameDTOS = genreNameDTOS;
+        this.deleted = deleted;
     }
 
     public void setBookId(long bookId) {
@@ -41,6 +39,10 @@ public class BookDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setGenreNameDTOS(Set<GenreNameDTO> genreNameDTOS) {
+        this.genreNameDTOS = genreNameDTOS;
     }
 
     public void setPrice(int price) {
@@ -63,16 +65,20 @@ public class BookDTO {
         this.release_year = release_year;
     }
 
-    public Set<GenreNameDTO> getGenreNameDTOS() {
-        return genreNameDTOS;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
-    public long getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public Set<GenreNameDTO> getGenreNameDTOS() {
+        return genreNameDTOS;
     }
 
     public int getPrice() {
@@ -91,10 +97,12 @@ public class BookDTO {
         return page_count;
     }
 
-
-
     public LocalDate getRelease_year() {
         return release_year;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override

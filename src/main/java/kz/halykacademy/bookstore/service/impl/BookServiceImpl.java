@@ -11,12 +11,16 @@ import kz.halykacademy.bookstore.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 @Service
 public class BookServiceImpl implements BookService {
+
+
 
     private final BookRepository bookRepository;
     private  final PublisherRepository publisherRepository;
@@ -25,6 +29,7 @@ public class BookServiceImpl implements BookService {
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
     }
+
 
 
     @Override
@@ -57,17 +62,16 @@ public class BookServiceImpl implements BookService {
                         null,
                         publisher,
                         book.getPage_count(),
-                        book.getRelease_year()
+                        book.getRelease_year(),
+                        false
                 )
         );
         return  saved.toDTO();
     }
 
-   /* @Override
-    public Books updateBooks(Books book) {
-        return bookRepository.save(book);
-    }
-*/
+
+
+
     @Override
     public void deleteBook(long bookId) throws Exception {
         bookRepository.deleteById(bookId);

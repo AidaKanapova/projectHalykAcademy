@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "book")
+@SQLDelete(sql = "update book set deleted = true where book_id = ?")
+@Where(clause = "deleted = false")
 
 public class Books {
 
@@ -50,12 +52,8 @@ public class Books {
     @Column(name = "release_year")
     private LocalDate release_year;
 
-
-
-
-
-   /* @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;*/
+    @Column(name = "deleted")
+    private boolean deleted;
 
     public BookNameDTO toBookDTO(){
         return new BookNameDTO(
@@ -83,7 +81,8 @@ public class Books {
                 authors,
                 this.publisher.getName(),
                 this.page_count,
-                this.release_year
+                this.release_year,
+                this.deleted
 
         );
     }
@@ -105,7 +104,7 @@ public class Books {
         super();
     }
 
-    public Books(long bookId, String title, Set<Genre> genres, int price, Set<Author> authors, Publisher publisher, int page_count, LocalDate release_year) {
+    public Books(long bookId, String title, Set<Genre> genres, int price, Set<Author> authors, Publisher publisher, int page_count, LocalDate release_year, boolean deleted) {
         this.bookId = bookId;
         this.title = title;
         this.genres = genres;
@@ -114,6 +113,7 @@ public class Books {
         this.publisher = publisher;
         this.page_count = page_count;
         this.release_year = release_year;
+        this.deleted = deleted;
     }
 
     public void setBookId(long bookId) {
@@ -122,6 +122,10 @@ public class Books {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 
     public void setPrice(int price) {
@@ -144,8 +148,8 @@ public class Books {
         this.release_year = release_year;
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public long getBookId() {
@@ -154,6 +158,10 @@ public class Books {
 
     public String getTitle() {
         return title;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
     }
 
     public int getPrice() {
@@ -176,9 +184,7 @@ public class Books {
         return release_year;
     }
 
-    public Set<Genre> getGenres() {
-        return genres;
+    public boolean isDeleted() {
+        return deleted;
     }
-
-
 }
