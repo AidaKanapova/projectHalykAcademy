@@ -129,17 +129,15 @@ public class Order {
 
     public void addBook(Books addBooks) {
 
-            List<Integer> sum = List.of();
+            List<Integer> sumList = List.of();
             if (this.books != null)
-                sum = this.books.stream().map(Books::getPrice).collect(Collectors.toList());
-            int lastSum = sum.stream().mapToInt(a -> a).sum();
-            int newSum = lastSum + addBooks.getPrice();
+                sumList = this.books.stream().map(Books::getPrice).collect(Collectors.toList());
+            int sum = (sumList.stream().mapToInt(a -> a).sum()) + addBooks.getPrice();
 
-            if (newSum < 10000) {
+            if (sum < 10000) {
                 books.add(addBooks);
             }else {
                 throw new IllegalArgumentException("Overprice");
-
             }
         }
 }

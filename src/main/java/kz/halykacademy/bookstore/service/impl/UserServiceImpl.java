@@ -5,19 +5,24 @@ import kz.halykacademy.bookstore.entity.User;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private  final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.encoder = encoder;
     }
+
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -35,11 +40,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO addUser(UserDTO userDTO) {
-        User user = userRepository.save(
+        User user = userRepository.saveAndFlush(
                 new User(
                         userDTO.getUser_id(),
                         userDTO.getLogin(),
-                        userDTO.getPassword(),
+                        encoder.encode(userDTO.getPassword()),
                         userDTO.getRole(),
                         userDTO.isBlocked()
                 )
@@ -48,10 +53,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User users) {
-        userRepository.save(users);
+    public void updateUser(UserDTO user,
+                           Long id) {
+        /*List<UserDTO> booksList = userRepository.findAll()
+                .stream()
+                .map(User::userDTO)
+                .toList();
+        UserDTO foundUser  = booksList.stream()
+                .filter(userDTO -> userDTO.getUser_id().equals(id)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Book not founded"));
 
-
+        foundUser.setLogin(user.getLogin());*/
     }
 
     @Override

@@ -1,8 +1,10 @@
 package kz.halykacademy.bookstore.service.impl;
 
 
+import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
+import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Order;
 import kz.halykacademy.bookstore.entity.OrderStatus;
 import kz.halykacademy.bookstore.entity.User;
@@ -22,9 +24,11 @@ public class OrderServiceImpl implements OrderService {
 
     private  final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository) {
+    private final BookRepository bookRepository;
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -43,20 +47,25 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO addOrder(SaveOrderDTO orderDTO) throws Throwable {
 
-        User user = userRepository.findById(orderDTO.getOrderId())
+        User user = userRepository.findById(orderDTO.getUserId())
                 .orElseThrow((Supplier<Throwable>) () ->
                         new ResourceNotFoundeException("user not founded"));
 
-        Order order = orderRepository.save(
-                new Order(
-                        orderDTO.getOrderId(),
-                        user,
-                        null,
-                        0,
-                        OrderStatus.CREATED,
-                        LocalDate.now()
-                )
-        );
+        Order order = null;
+        if(user.isBlocked()==true){throw new IllegalArgumentException("blocked user");}
+        else{
+
+           order = orderRepository.save(
+                    new Order(
+                            orderDTO.getOrderId(),
+                            user,
+                            null,
+                            0,
+                            OrderStatus.CREATED,
+                            LocalDate.now()
+                    )
+            );
+        }
         return order.orderDTO();
     }
 
@@ -72,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.deleteById(orderId);
     }
+
 
 
 }

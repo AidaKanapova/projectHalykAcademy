@@ -1,10 +1,9 @@
 package kz.halykacademy.bookstore.controller;
 
 
-import kz.halykacademy.bookstore.dto.BookDTO;
-import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.dto.UserDTO;
 import kz.halykacademy.bookstore.entity.User;
+import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +13,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private  final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 
@@ -36,9 +37,31 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public void updateUser(@RequestBody User user){
-        userService.updateUser(user);
+   public User updateUser(@RequestBody User user){
+        return userRepository.save(user);
     }
+
+
+  /* public UserDTO updateUser(@RequestBody User userDTO,
+                           @PathVariable Long id){
+        List<UserDTO> booksList = userRepository.findAll()
+                .stream()
+                .map(User::userDTO)
+                .toList();
+        UserDTO foundUser  = booksList.stream()
+                .filter(user -> user.getUser_id().equals(id)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Book not founded"));
+
+        foundUser.setUser_id(userDTO.getUser_id());
+        foundUser.setLogin(userDTO.getLogin());
+        foundUser.setPassword(userDTO.getPassword());
+        foundUser.setRole(userDTO.getRole());
+        foundUser.setBlocked(userDTO.isBlocked());
+         return foundUser;
+*/
+
+
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteBook(@PathVariable("id") long userId) throws Exception {

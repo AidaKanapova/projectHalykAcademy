@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -50,17 +51,18 @@ public class BookController{
         bookService.deleteBook(bookId);
     }
 
-    @PostMapping("/updateBook/{id}")
-    public void updateBook(@RequestBody SaveBookDTO bookDTO,
-                           @PathVariable Long id) throws Throwable {
+    @PostMapping("/updateBook")
+    public Books updateBook(@RequestBody Books bookDTO) {
+        return bookRepository.save(bookDTO);
+    }
 
 
-       BookDTO foundBook = bookRepository.findById(id)
+      /* BookDTO foundBook = bookRepository.findById(id)
                 .map(Books::toDTO)
 
                 .orElseThrow((Supplier<Throwable>) () ->
                         new ResourceNotFoundeException("Book %s not found".formatted(id)));
-
+*/
       /* List<BookDTO> booksList = bookRepository.findAll()
                 .stream()
                 .map(Books::toDTO)
@@ -69,8 +71,7 @@ public class BookController{
                         .filter(bookDTO1 -> bookDTO1.getBookId().equals(id)).findFirst()
                         .orElseThrow(() -> new IllegalArgumentException("Book not founded"));*/
 
-        foundBook.setTitle(bookDTO.getTitle());
-    }
+
 
 
     @GetMapping("/findByTitle/{title}")
