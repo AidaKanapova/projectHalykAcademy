@@ -5,6 +5,7 @@ import kz.halykacademy.bookstore.entity.User;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,27 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private  final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
+    @PostConstruct
+    public  void init(){
+        Optional<User> admin = userRepository.findByLogin("user");
+        if(admin.isEmpty()){
+            userRepository.saveAndFlush(
+                    new User(
+                            null,
+                            "user",
+                            encoder.encode("admin"),
+                            "USER",
+                            false
+                    )
+            );
+        }
     }
+
 
 
     @Override
