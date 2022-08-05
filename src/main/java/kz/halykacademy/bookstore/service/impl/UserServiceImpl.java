@@ -2,6 +2,7 @@ package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.dto.UserDTO;
 import kz.halykacademy.bookstore.entity.User;
+import kz.halykacademy.bookstore.entity.UserRole;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
@@ -22,14 +23,15 @@ public class UserServiceImpl implements UserService {
 
     @PostConstruct
     public  void init(){
-        Optional<User> admin = userRepository.findByLogin("user");
+        Optional<User> admin = userRepository.findByLogin("admin");
         if(admin.isEmpty()){
             userRepository.saveAndFlush(
                     new User(
                             null,
-                            "user",
+                            "admin",
                             encoder.encode("admin"),
-                            "USER",
+                            null,
+                            UserRole.ADMIN,
                             false
                     )
             );
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
                         userDTO.getUser_id(),
                         userDTO.getLogin(),
                         encoder.encode(userDTO.getPassword()),
+                        null,
                         userDTO.getRole(),
                         userDTO.isBlocked()
                 )
@@ -67,22 +70,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO user,
-                           Long id) {
-        /*List<UserDTO> booksList = userRepository.findAll()
-                .stream()
-                .map(User::userDTO)
-                .toList();
-        UserDTO foundUser  = booksList.stream()
-                .filter(userDTO -> userDTO.getUser_id().equals(id)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Book not founded"));
-
-        foundUser.setLogin(user.getLogin());*/
+    public User updateUser(long id, User user) {
+        Optional<User> retrievedUser=userRepository.findById(id);
+        if(retrievedUser==null)
+            try {
+                throw new Exception("User not found");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        userRepository.save(user);
+        return userRepository.findById(id).get();
     }
 
     @Override
     public void deleteUser(long userId) throws Exception {
 
         userRepository.deleteById(userId);
+    }
+
+    public Optional<User> findByLogin(String login){
+        Optional<User> user = userRepository.findByLogin(login);
+        return user;
     }
 }

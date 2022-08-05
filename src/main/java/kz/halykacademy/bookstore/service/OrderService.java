@@ -12,7 +12,7 @@ public interface OrderService {
     public List<OrderDTO> getAllOrders();
     public OrderDTO getOrderById(long orderId) throws Throwable;
     public OrderDTO addOrder(SaveOrderDTO orderDTO) throws Throwable;
-    public void updateOrder(Order order);
+    public void updateOrder( SaveOrderDTO order,long id) throws Throwable;
 
     public void deleteOrder(long orderId) throws Exception;
 

@@ -5,15 +5,23 @@ import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Order;
+import kz.halykacademy.bookstore.entity.User;
+import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.OrderRepository;
+import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.OrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
@@ -21,12 +29,9 @@ public class OrderController {
     private final OrderRepository orderRepository;
 
     private  final BookRepository bookRepository;
+    private  final UserRepository userRepository;
 
-    public OrderController(OrderService orderService, OrderRepository orderRepository, BookRepository bookRepository) {
-        this.orderService = orderService;
-        this.orderRepository = orderRepository;
-        this.bookRepository = bookRepository;
-    }
+
 
     @GetMapping("/allOrders")
     public List<OrderDTO> getAllOrders() {
@@ -43,10 +48,23 @@ public class OrderController {
         return  orderService.addOrder(orderDTO);
     }
 
-    @PutMapping("/updateOrder")
-    public void updateOrder(@RequestBody Order order){
-        orderService.updateOrder(order);
+    @PostMapping("/updateOrder/{orderId}")
+    public void updateOrder(@RequestBody SaveOrderDTO newOrder,
+                                           @PathVariable("orderId") long orderId) throws Throwable {
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
+        long userId = userRepository.findByLogin(userDetails.getUsername()).get().getUser_id();  //id юзера который вошел
+        long foundUserIdOnOrder = orderRepository.findById(orderId).get().getUser().getUser_id(); // id юзера в заказе
+
+
+        if(userId == foundUserIdOnOrder){
+        orderService.updateOrder(newOrder, orderId);}
+        else {throw  new ResourceNotFoundeException("not your order");
+        }
     }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteOrder(@PathVariable("id") long orderId) throws Exception {

@@ -17,6 +17,7 @@ public interface BookService {
     public BookDTO createBook(SaveBookDTO book) throws  Throwable;
 
 
+    public void updateBook(SaveBookDTO book, long id) throws Throwable;
     public void deleteBook(long bookId) throws Exception;
 
     public  List<Books> findByTitle(String title);

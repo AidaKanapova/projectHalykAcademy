@@ -6,6 +6,7 @@ import kz.halykacademy.bookstore.entity.User;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,9 +34,11 @@ public class UserController {
         return  userService.addUser(userDTO);
     }
 
-    @PutMapping("/updateUser")
-   public User updateUser(@RequestBody User user){
-        return userRepository.save(user);
+    @PutMapping("/updateUser/{userId}")
+   public ResponseEntity<User> updateUser(@RequestBody User newUser,
+                                          @PathVariable("userId") long userId){
+
+        return ResponseEntity.ok().body(userService.updateUser(userId,newUser));
     }
 
 

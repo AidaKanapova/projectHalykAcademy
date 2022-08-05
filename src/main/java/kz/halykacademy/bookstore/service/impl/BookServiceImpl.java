@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -69,7 +72,50 @@ public class BookServiceImpl implements BookService {
         return  saved.toDTO();
     }
 
+    @Override
+    public void updateBook(SaveBookDTO book, long id) throws Throwable {
 
+
+        BookDTO books = bookRepository.findById(id)
+                .map(Books::toDTO)
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Book %s not found".formatted(id)));
+
+        Publisher publisher = publisherRepository.findById(book.getPublisherId())
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("Cannot persist book %s".formatted(book.getBookId())));
+
+
+
+        Books saveBook = bookRepository.save(
+                new Books(
+                        book.getBookId(),
+                        book.getTitle(),
+                        null,
+                        book.getPrice(),
+                        null,
+                        publisher,
+                        book.getPage_count(),
+                        book.getRelease_year(),
+                        false
+                )
+        );
+
+        saveBook.toDTO();
+
+
+       /* books.setBookId(book.getBookId()),
+        books.setTitle(book.getTitle()),
+        books.setPrice(book.getPrice()),
+        books.setPublisher(publisher.getName()),
+        books.setPage_count(book.getPage_count()),
+        books.setRelease_year(book.getRelease_year()),
+        books.setDeleted(book.isDeleted())
+        )
+
+        bookRepository.save(books);*/
+
+    }
 
 
     @Override

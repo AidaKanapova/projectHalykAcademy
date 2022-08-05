@@ -4,19 +4,19 @@ package kz.halykacademy.bookstore.service.impl;
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
-import kz.halykacademy.bookstore.entity.Books;
-import kz.halykacademy.bookstore.entity.Order;
-import kz.halykacademy.bookstore.entity.OrderStatus;
-import kz.halykacademy.bookstore.entity.User;
+import kz.halykacademy.bookstore.entity.*;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.OrderRepository;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.OrderService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
@@ -70,17 +70,52 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrder(Order order) {
-        orderRepository.save(order);
+    public void updateOrder(SaveOrderDTO orderDTO, long id) throws Throwable {
 
 
+        User user = userRepository.findById(orderDTO.getUserId())
+                .orElseThrow((Supplier<Throwable>) () ->
+                        new ResourceNotFoundeException("user not founded"));
+
+        Order order = null;
+        if (user.isBlocked()) {
+            throw new IllegalArgumentException("blocked user");
+        } else {
+
+            order = orderRepository.save(
+                    new Order(
+                            orderDTO.getOrderId(),
+                            user,
+                            null,
+                            0,
+                            OrderStatus.CREATED,
+                            LocalDate.now()
+                    )
+            );
+        }
+        order.orderDTO();
     }
+
+        /*Optional<Order> retrievedUser=orderRepository.findById(id);
+        if(retrievedUser==null)
+            try {
+                throw new Exception("Order not found");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        orderRepository.save(order);
+        return orderRepository.findById(id).get();*/
+
+
+
 
     @Override
     public void deleteOrder(long orderId) throws Exception {
 
         orderRepository.deleteById(orderId);
     }
+
+
 
 
 

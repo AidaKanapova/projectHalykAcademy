@@ -51,9 +51,10 @@ public class BookController{
         bookService.deleteBook(bookId);
     }
 
-    @PostMapping("/updateBook")
-    public Books updateBook(@RequestBody Books bookDTO) {
-        return bookRepository.save(bookDTO);
+    @PostMapping("/updateBook/{id}")
+    public void updateBook(@RequestBody SaveBookDTO bookDTO,
+                           @PathVariable long id) throws Throwable {
+       bookService.updateBook(bookDTO,id);
     }
 
 
