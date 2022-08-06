@@ -49,10 +49,10 @@ public class OrderController {
     }
 
     @PostMapping("/updateOrder/{orderId}")
-    public void updateOrder(@RequestBody SaveOrderDTO newOrder,
+    public OrderDTO updateOrder(@RequestBody SaveOrderDTO newOrder,
                                            @PathVariable("orderId") long orderId) throws Throwable {
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       /* UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
         long userId = userRepository.findByLogin(userDetails.getUsername()).get().getUser_id();  //id юзера который вошел
@@ -62,7 +62,8 @@ public class OrderController {
         if(userId == foundUserIdOnOrder){
         orderService.updateOrder(newOrder, orderId);}
         else {throw  new ResourceNotFoundeException("not your order");
-        }
+        }*/
+        return orderService.updateOrder(newOrder,orderId);
     }
 
 
@@ -72,11 +73,7 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/book/{bookId}")
-    public Order addBookToOrder(@PathVariable long orderId, @PathVariable long bookId) {
-        Order order = orderRepository.findById(orderId).get();
-        Books books = bookRepository.findById(bookId).get();
-
-        order.addBook(books);
-        return  orderRepository.save(order);
+    public OrderDTO addBookToOrder(@PathVariable long orderId, @PathVariable long bookId) {
+        return orderService.addBook(orderId,bookId);
     }
 }

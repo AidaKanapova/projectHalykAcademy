@@ -2,12 +2,14 @@ package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
+import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
 import kz.halykacademy.bookstore.repository.GenreRepository;
 import kz.halykacademy.bookstore.service.AuthorService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -54,6 +56,7 @@ public class AuthorServiceImpl implements AuthorService {
                         author.getAuthorId(),
                         author.getFull_name(),
                         author.getDate_of_birth(),
+                        null,
                         null
 
                 )
@@ -89,6 +92,8 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findByName(String name) {
         return (List<Author>) authorRepository.findByName(name);
     }
+
+
 
   /*  @Override
     public List<GenreNameDTO> getGenreList(long id) {

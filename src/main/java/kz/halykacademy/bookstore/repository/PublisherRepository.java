@@ -1,8 +1,5 @@
 package kz.halykacademy.bookstore.repository;
 
-import kz.halykacademy.bookstore.dto.AuthorDTO;
-import kz.halykacademy.bookstore.dto.AuthorGenreDTO;
-import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Publisher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

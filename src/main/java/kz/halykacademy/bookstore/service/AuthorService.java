@@ -2,10 +2,7 @@ package kz.halykacademy.bookstore.service;
 
 import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
-import kz.halykacademy.bookstore.entity.Books;
-import org.springframework.data.domain.Page;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface AuthorService {

@@ -2,6 +2,7 @@ package kz.halykacademy.bookstore.service;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
+import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +18,7 @@ public interface BookService {
     public BookDTO createBook(SaveBookDTO book) throws  Throwable;
 
 
-    public void updateBook(SaveBookDTO book, long id) throws Throwable;
+    public BookDTO updateBook(UpdateBookDTO book, long id) throws Throwable;
     public void deleteBook(long bookId) throws Exception;
 
     public  List<Books> findByTitle(String title);

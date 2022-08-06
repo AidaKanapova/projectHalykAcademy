@@ -2,6 +2,7 @@ package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
+import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
@@ -73,35 +74,32 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBook(SaveBookDTO book, long id) throws Throwable {
+    public BookDTO updateBook(UpdateBookDTO book, long id) throws Throwable {
 
 
-        BookDTO books = bookRepository.findById(id)
-                .map(Books::toDTO)
+       /*Publisher publisher = publisherRepository.findById(book.getPublisherId())
                 .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Book %s not found".formatted(id)));
-
-        Publisher publisher = publisherRepository.findById(book.getPublisherId())
-                .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Cannot persist book %s".formatted(book.getBookId())));
+                        new ResourceNotFoundeException("Cannot persist book %s".formatted(id)));*/
 
 
+        Books books = bookRepository.findById(id).get();
 
         Books saveBook = bookRepository.save(
                 new Books(
-                        book.getBookId(),
+                        books.getBookId(),
                         book.getTitle(),
-                        null,
+                        books.getGenres(),
                         book.getPrice(),
-                        null,
-                        publisher,
+                        books.getAuthors(),
+                        books.getPublisher(),
                         book.getPage_count(),
                         book.getRelease_year(),
-                        false
+                        books.isDeleted()
                 )
         );
 
-        saveBook.toDTO();
+
+      return  saveBook.toDTO();
 
 
        /* books.setBookId(book.getBookId()),

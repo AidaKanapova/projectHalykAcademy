@@ -26,8 +26,12 @@ public class CustomSecurityConfiguration  {
        return http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/**").authenticated()
                .antMatchers(HttpMethod.POST,"/orders/**").authenticated()
+               .antMatchers(HttpMethod.PUT,"/orders/**").authenticated()
 
+
+/*
                .antMatchers(HttpMethod.PUT,"/orders/updateOrder/{userId}").access("@userSecurity.hasUserId(authentication,#userId)")
+*/
 
 
                 .antMatchers( "/**").hasAuthority("ADMIN")

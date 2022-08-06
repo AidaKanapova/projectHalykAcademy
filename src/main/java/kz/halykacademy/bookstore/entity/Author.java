@@ -2,6 +2,8 @@ package kz.halykacademy.bookstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.dto.*;
+import kz.halykacademy.bookstore.repository.AuthorRepository;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +15,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name="author")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 
 public class Author {
 
@@ -40,13 +46,9 @@ public class Author {
     private Set<Books> books = new HashSet<>();
 
 
+    @OneToMany
+    private  List<Genre> genreList;
 
-
-    /*@Query(value = "select g from Author_book a join Book_genre g on a.book_id = g.book_id where a.author_id = ?1 ")
-    List<GenreNameDTO> findByName(String name) {
-
-        return
-    }*/
 
 
     public AuthorNameDTO toAuthorDTO(){
@@ -64,7 +66,6 @@ public class Author {
         Set<BookNameDTO> books = Set.of();
         if(this.books != null)
             books = this.books.stream().map(Books::toBookDTO).collect(Collectors.toSet());
-
         return new AuthorDTO(
                 this.authorId,
                 this.full_name,
@@ -73,79 +74,18 @@ public class Author {
         );
     }
 
-   /* public AuthorGenreDTO AuthorGenreToDTO(){
-        Set<GenreNameDTO> genreNameDTOS = Set.of();
-        if(this.genres != null)
-            genreNameDTOS = this.genres.stream().map(Genre::toGenreDTO).collect(Collectors.toSet());
+    public AuthorGenreListDTO authorGenreDTO(){
 
-
-        return new AuthorGenreDTO(
+        List<GenreNameDTO> genres = List.of();
+        if(this.genreList != null)
+            genres = this.genreList.stream().map(Genre::toGenreDTO).collect(Collectors.toList());
+        return new AuthorGenreListDTO(
+                this.authorId,
                 this.full_name,
-                genre
+                genres
         );
-
-    }
-*/
-
-   /* @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;*/
-
-   public Author() {
-        super();
-    }
-    public Author(long authorId, String fullName, LocalDate dateOfBirth, Set<Books> books) {
-        this.authorId = authorId;
-        this.full_name = fullName;
-        this.date_of_birth = dateOfBirth;
-        this.books = books;
-
     }
 
-
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
-    }
-
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
-    }
-
-    public void setDate_of_birth(LocalDate date_of_birth) {
-        this.date_of_birth = date_of_birth;
-    }
-
-    public void setBooks(Set<Books> books) {
-        this.books = books;
-    }
-
-
-
-    public long getAuthorId() {
-        return authorId;
-    }
-
-    public String getFull_name() {
-        return full_name;
-    }
-
-    public LocalDate getDate_of_birth() {
-        return date_of_birth;
-    }
-
-    public Set<Books> getBooks() {
-        return books;
-    }
-
-
-    public void addBook(Books book){
-        books.add(book);
-        book.getAuthors().add(this);
-    }
-
-    public void removeBook(Books book){
-        this.books.remove(book);
-        book.getAuthors().remove(this);
-    }
 
 }
 

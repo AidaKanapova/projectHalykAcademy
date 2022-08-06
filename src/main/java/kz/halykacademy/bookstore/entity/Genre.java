@@ -40,7 +40,6 @@ public class Genre {
     public GenreNameDTO toGenreDTO(){
         return new GenreNameDTO(
 
-
                this.getGenre_name()
         );
     }

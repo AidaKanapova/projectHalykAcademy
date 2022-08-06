@@ -2,6 +2,7 @@ package kz.halykacademy.bookstore.controller;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
+import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.BookRepository;
@@ -52,9 +53,9 @@ public class BookController{
     }
 
     @PostMapping("/updateBook/{id}")
-    public void updateBook(@RequestBody SaveBookDTO bookDTO,
+    public BookDTO updateBook(@RequestBody UpdateBookDTO bookDTO,
                            @PathVariable long id) throws Throwable {
-       bookService.updateBook(bookDTO,id);
+       return  bookService.updateBook(bookDTO,id);
     }
 
 
@@ -86,6 +87,8 @@ public class BookController{
         }
         return new ResponseEntity<List<Books>>(books, HttpStatus.OK);
     }
+
+
 }
 
 

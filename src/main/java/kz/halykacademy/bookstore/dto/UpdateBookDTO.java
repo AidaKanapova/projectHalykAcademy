@@ -1,18 +1,20 @@
 package kz.halykacademy.bookstore.dto;
 
+
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthorNameDTO {
+public class UpdateBookDTO {
 
-    private  long authorId;
-    private  String full_name;
-
+    private String title;
+    private int price;
+    private int page_count;
+    private LocalDate release_year;
 
 }

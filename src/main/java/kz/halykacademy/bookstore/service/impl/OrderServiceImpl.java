@@ -22,9 +22,11 @@ import java.util.function.Supplier;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private  final OrderRepository orderRepository;
+
+    private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+
     public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
@@ -52,32 +54,6 @@ public class OrderServiceImpl implements OrderService {
                         new ResourceNotFoundeException("user not founded"));
 
         Order order = null;
-        if(user.isBlocked()==true){throw new IllegalArgumentException("blocked user");}
-        else{
-
-           order = orderRepository.save(
-                    new Order(
-                            orderDTO.getOrderId(),
-                            user,
-                            null,
-                            0,
-                            OrderStatus.CREATED,
-                            LocalDate.now()
-                    )
-            );
-        }
-        return order.orderDTO();
-    }
-
-    @Override
-    public void updateOrder(SaveOrderDTO orderDTO, long id) throws Throwable {
-
-
-        User user = userRepository.findById(orderDTO.getUserId())
-                .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("user not founded"));
-
-        Order order = null;
         if (user.isBlocked()) {
             throw new IllegalArgumentException("blocked user");
         } else {
@@ -93,30 +69,65 @@ public class OrderServiceImpl implements OrderService {
                     )
             );
         }
-        order.orderDTO();
+        return order.orderDTO();
     }
-
-        /*Optional<Order> retrievedUser=orderRepository.findById(id);
-        if(retrievedUser==null)
-            try {
-                throw new Exception("Order not found");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        orderRepository.save(order);
-        return orderRepository.findById(id).get();*/
-
-
-
 
     @Override
-    public void deleteOrder(long orderId) throws Exception {
+    public OrderDTO updateOrder(SaveOrderDTO orderDTO, long orderId) throws Throwable {
 
-        orderRepository.deleteById(orderId);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (userDetails.getAuthorities().contains(UserRole.ADMIN)) {
+
+            Order order = orderRepository.findById(orderId).get();
+
+
+            Order updateOrder = new Order(
+                    order.getOrderId(),
+                    order.getUser(),
+                    order.getBooks(),
+                    order.getSum(),
+                    OrderStatus.valueOf(orderDTO.getStatus()),
+                    order.getCreated()
+            );
+
+            return updateOrder.orderDTO();
+
+
+        } else {
+            throw new IllegalArgumentException("you cant change status of order");
+        }
+
+
     }
 
+    @Override
+    public OrderDTO addBook(long orderId, long bookId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
+        long userId = userRepository.findByLogin(userDetails.getUsername()).get().getUser_id();  //id юзера который вошел
+        long foundUserIdOnOrder = orderRepository.findById(orderId).get().getUser().getUser_id(); // id юзера в заказе
 
 
-}
+        if (userId == foundUserIdOnOrder && userDetails.getAuthorities().contains(UserRole.USER)) {
+
+            Order order = orderRepository.findById(orderId).get();
+            Books books = bookRepository.findById(bookId).get();
+
+            order.addBook(books);
+
+            return orderRepository.save(order).orderDTO();
+        } else {
+            throw new IllegalArgumentException("its not your order");
+        }
+    }
+
+        @Override
+        public void deleteOrder ( long orderId) throws Exception {
+
+            orderRepository.deleteById(orderId);
+        }
+
+
+    }

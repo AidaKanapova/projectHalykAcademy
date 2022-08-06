@@ -1,15 +1,11 @@
 package kz.halykacademy.bookstore.repository;
 
 
-import kz.halykacademy.bookstore.dto.AuthorGenreDTO;
 import kz.halykacademy.bookstore.entity.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 
 @Repository
@@ -26,6 +22,18 @@ public interface AuthorRepository extends JpaRepository<Author,Long> {
     List<Author> findByName(String name);
 
 
+
+
+/*
+    @Query(value = "select Genre .genre_name from B a join Genre .books g on a.bookId = g.bookId where Author .authorId = :authorId", nativeQuery = true)
+*/
+
+    @Query(value = " select distinct g.genre_id \n" +
+            "from public.author_book a \n" +
+            "join public.book_genre g \n" +
+            "on a.book_id = g.book_id \n" +
+            "where a.author_id = :authorId ",nativeQuery = true)
+    List<Long> genreList(long authorId);
 
 /*
     List<AuthorGenreDTO> findGenreList(Long id);
