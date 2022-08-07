@@ -14,7 +14,5 @@ public class GenreDTO {
 
     private long genre_id;
     private String genre_name;
-    private Set<BookNameDTO> bookDTOS;
-
 
 }

@@ -11,7 +11,7 @@ public interface UserService {
     public List<UserDTO> getAllUsers();
     public UserDTO getUserById(long userId) throws Throwable;
     public UserDTO addUser(UserDTO userDTO);
-    public User updateUser( long id, User user) ;
+    public UserDTO updateUser(UserDTO userDTO, long id) ;
 
     public void deleteUser(long userId) throws Exception;
 

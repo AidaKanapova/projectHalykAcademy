@@ -12,5 +12,4 @@ public class PublisherDTO {
     private  long publisherId;
     private  String name;
 
-
 }

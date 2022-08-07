@@ -26,12 +26,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final OrderRepository orderRepository;
-
-    private  final BookRepository bookRepository;
-    private  final UserRepository userRepository;
-
-
 
     @GetMapping("/allOrders")
     public List<OrderDTO> getAllOrders() {
@@ -52,17 +46,6 @@ public class OrderController {
     public OrderDTO updateOrder(@RequestBody SaveOrderDTO newOrder,
                                            @PathVariable("orderId") long orderId) throws Throwable {
 
-       /* UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-
-        long userId = userRepository.findByLogin(userDetails.getUsername()).get().getUser_id();  //id юзера который вошел
-        long foundUserIdOnOrder = orderRepository.findById(orderId).get().getUser().getUser_id(); // id юзера в заказе
-
-
-        if(userId == foundUserIdOnOrder){
-        orderService.updateOrder(newOrder, orderId);}
-        else {throw  new ResourceNotFoundeException("not your order");
-        }*/
         return orderService.updateOrder(newOrder,orderId);
     }
 

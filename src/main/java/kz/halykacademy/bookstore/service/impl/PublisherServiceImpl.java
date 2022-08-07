@@ -47,11 +47,24 @@ public class PublisherServiceImpl implements PublisherService {
         return  saved.toDTO();
     }
 
-   /* @Override
-    public Publisher updatePublisher(Publisher publisher) {
-        return publisherRepository.save(publisher);
+    @Override
+    public PublisherDTO updatePublisher(PublisherDTO publisherDTO, long id) {
+        Publisher publisher = publisherRepository.findById(id).get();
+        Publisher updatePublisher = publisherRepository.save(
+                new Publisher(
+                        publisher.getPublisherId(),
+                        publisherDTO.getName(),
+                        publisher.getBooks()
+                )
+        );
+        return updatePublisher.toDTO();
     }
-*/
+
+    /* @Override
+     public Publisher updatePublisher(Publisher publisher) {
+         return publisherRepository.save(publisher);
+     }
+ */
     @Override
     public void deletePublisher(long publisherId) throws Exception {
         publisherRepository.deleteById(publisherId);
@@ -59,7 +72,7 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public List<Publisher> findByName(String name) {
-        return (List<Publisher>) publisherRepository.findByName(name);
+    public List<PublisherDTO> findByName(String name) {
+        return  publisherRepository.findByName(name).stream().map(Publisher::toDTO).toList();
     }
 }

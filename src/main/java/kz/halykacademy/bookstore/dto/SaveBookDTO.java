@@ -15,8 +15,8 @@ public class SaveBookDTO {
     private String title;
     private int price;
     private long publisherId;
-    private int page_count;
-    private LocalDate release_year;
+    private int pageCount;
+    private LocalDate releaseYear;
     private boolean deleted;
 
 

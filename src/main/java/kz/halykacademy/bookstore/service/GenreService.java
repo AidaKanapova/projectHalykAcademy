@@ -10,8 +10,8 @@ public interface GenreService {
 
     public List<GenreDTO> getAllGenre();
     public  GenreDTO getGenreById(long genreId) throws Throwable;
-    public GenreDTO addGenre(SaveGenreDTO genre);
-    /*public Genre updateGenre(Genre genre);*/
+    public GenreDTO addGenre(GenreDTO genre);
+    public GenreDTO updateGenre(GenreDTO genre, long id);
     public void deleteGenre(long genreId) throws Exception;
 
 }

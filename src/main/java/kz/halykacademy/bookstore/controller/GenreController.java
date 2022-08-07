@@ -1,23 +1,23 @@
 package kz.halykacademy.bookstore.controller;
 
 
+import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.GenreDTO;
 import kz.halykacademy.bookstore.dto.SaveGenreDTO;
+import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.service.GenreService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/genres")
 public class GenreController {
 
     private final GenreService genreService;
-
-    public GenreController(GenreService genreService) {
-        this.genreService = genreService;
-    }
 
 
     @GetMapping("/allGenres")
@@ -33,9 +33,15 @@ public class GenreController {
     }
 
     @PostMapping("/addGenre")
-    public GenreDTO addGenre(@RequestBody SaveGenreDTO genre) {
+    public GenreDTO addGenre(@RequestBody GenreDTO genre) {
         return genreService.addGenre(genre);
 
+    }
+
+    @PutMapping("/updateGenre/{id}")
+    public GenreDTO updateBook(@RequestBody GenreDTO genreDTO,
+                              @PathVariable long id)  {
+        return  genreService.updateGenre(genreDTO,id);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -22,5 +22,4 @@ public class BookDTO {
     private int page_count;
     private LocalDate release_year;
     private boolean deleted;
-
 }

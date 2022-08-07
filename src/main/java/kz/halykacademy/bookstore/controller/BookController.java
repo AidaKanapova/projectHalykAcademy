@@ -7,6 +7,7 @@ import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +18,11 @@ import java.util.function.Supplier;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/books")
 public class BookController{
 
     private final BookService bookService;
-    private final BookRepository bookRepository;
-
-
-
-    public BookController(BookService bookService, BookRepository bookRepository) {
-        this.bookService = bookService;
-        this.bookRepository = bookRepository;
-    }
-
-
 
     @GetMapping("/allBooks")
     public List<BookDTO> getAllBooks() {
@@ -42,8 +34,8 @@ public class BookController{
         return bookService.getBookById(bookId);
     }
 
-    @PostMapping("/createBook")
-    public BookDTO createBook(@RequestBody SaveBookDTO book) throws Throwable {
+    @PostMapping("/addBook")
+    public BookDTO addBook(@RequestBody SaveBookDTO book) throws Throwable {
         return  bookService.createBook(book);
     }
 
@@ -52,40 +44,16 @@ public class BookController{
         bookService.deleteBook(bookId);
     }
 
-    @PostMapping("/updateBook/{id}")
+    @PutMapping("/updateBook/{id}")
     public BookDTO updateBook(@RequestBody UpdateBookDTO bookDTO,
                            @PathVariable long id) throws Throwable {
        return  bookService.updateBook(bookDTO,id);
     }
 
 
-      /* BookDTO foundBook = bookRepository.findById(id)
-                .map(Books::toDTO)
-
-                .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Book %s not found".formatted(id)));
-*/
-      /* List<BookDTO> booksList = bookRepository.findAll()
-                .stream()
-                .map(Books::toDTO)
-                .toList();
-        BookDTO foundBook  = booksList.stream()
-                        .filter(bookDTO1 -> bookDTO1.getBookId().equals(id)).findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException("Book not founded"));*/
-
-
-
-
     @GetMapping("/findByTitle/{title}")
-    public ResponseEntity<List<Books>> findByTitle(@PathVariable("title") String title) {
-        List<Books> books = null;
-        try {
-            books = bookService.findByTitle(title);
-        } catch (Exception ex) {
-            ex.getMessage();
-
-        }
-        return new ResponseEntity<List<Books>>(books, HttpStatus.OK);
+    public List<BookDTO> findByTitle(@PathVariable("title") String title) {
+        return  bookService.findByTitle(title);
     }
 
 

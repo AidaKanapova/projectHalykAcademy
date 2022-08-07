@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
-    @Query(value = "SELECT  u FROM Publisher u WHERE u.name  LIKE %?1% ")
+    @Query(value = "SELECT  u FROM Publisher u WHERE lower(u.name)  LIKE %?1% ")
     List<Publisher> findByName(String name);
 
 /*

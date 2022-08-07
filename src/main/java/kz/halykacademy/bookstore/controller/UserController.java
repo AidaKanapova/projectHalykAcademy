@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private  final UserService userService;
-    private final UserRepository userRepository;
 
 
     @GetMapping("/allUsers")
@@ -34,34 +33,10 @@ public class UserController {
         return  userService.addUser(userDTO);
     }
 
-    @PutMapping("/updateUser/{userId}")
-   public ResponseEntity<User> updateUser(@RequestBody User newUser,
-                                          @PathVariable("userId") long userId){
-
-        return ResponseEntity.ok().body(userService.updateUser(userId,newUser));
+    @PutMapping("/updateUser/{id}")
+    public UserDTO updateUser(@RequestBody UserDTO userDTO, @PathVariable long id){
+        return userService.updateUser(userDTO,id);
     }
-
-
-  /* public UserDTO updateUser(@RequestBody User userDTO,
-                           @PathVariable Long id){
-        List<UserDTO> booksList = userRepository.findAll()
-                .stream()
-                .map(User::userDTO)
-                .toList();
-        UserDTO foundUser  = booksList.stream()
-                .filter(user -> user.getUser_id().equals(id)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Book not founded"));
-
-        foundUser.setUser_id(userDTO.getUser_id());
-        foundUser.setLogin(userDTO.getLogin());
-        foundUser.setPassword(userDTO.getPassword());
-        foundUser.setRole(userDTO.getRole());
-        foundUser.setBlocked(userDTO.isBlocked());
-         return foundUser;
-*/
-
-
-
 
     @DeleteMapping("/delete/{id}")
     public void deleteBook(@PathVariable("id") long userId) throws Exception {

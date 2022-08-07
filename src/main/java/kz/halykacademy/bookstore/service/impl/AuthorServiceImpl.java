@@ -10,6 +10,7 @@ import kz.halykacademy.bookstore.service.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -35,6 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorDTO> findAll() {
+
         return authorRepository.findAll()
                 .stream()
                 .map(Author::toDTO)
@@ -43,6 +45,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO getAuthorById(long authorId) throws Throwable {
+        /*Author author = authorRepository.findById(authorId).get();
+        author.setGenreList(authorRepository.genres(authorId));
+        return author.toDTO();*/
+
         return authorRepository.findById(authorId)
                 .map(Author::toDTO)
                 .orElseThrow((Supplier<Throwable>) () ->
@@ -58,56 +64,39 @@ public class AuthorServiceImpl implements AuthorService {
                         author.getDate_of_birth(),
                         null,
                         null
-
                 )
         );
         return  saved.toDTO();
     }
 
+    @Override
+    public AuthorDTO updateAuthor(SaveAuthorDTO authorDTO, long id) {
+        Author author = authorRepository.findById(id).get();
 
-    /*@Override
-    public Author updateAuthors(Author author) {
-        return authorRepository.save(author);
-    }*/
+        Author updateAuthor = authorRepository.save(
+                new Author(
+                        author.getAuthorId(),
+                        authorDTO.getFull_name(),
+                        authorDTO.getDate_of_birth(),
+                        author.getBooks(),
+                        author.getGenreList()
+                )
+        );
+        return updateAuthor.toDTO();
+    }
+
 
     @Override
-    public Author deleteAuthor(long authorId) throws Exception {
+    public void deleteAuthor(long authorId) throws Exception {
 
-        Author deleteAuthor = null;
-        try {
-            deleteAuthor = authorRepository.findById(authorId).orElse(null);
-            if (deleteAuthor == null) {
-                throw new Exception("author not available");
-            } else {
-                authorRepository.deleteById(authorId);
-            }
-        } catch (Exception ex) {
-            throw ex;
-        }
-
-        return deleteAuthor;
+       authorRepository.deleteById(authorId);
     }
 
     @Override
-    public List<Author> findByName(String name) {
-        return (List<Author>) authorRepository.findByName(name);
+    public List<AuthorDTO> findByName(String name) {
+        return authorRepository.findByName(name).stream().map(Author::toDTO).toList();
     }
 
 
 
-  /*  @Override
-    public List<GenreNameDTO> getGenreList(long id) {
-         return  null;
-    }
-*/
-   /* @Override
-    public List<AuthorGenreDTO> getGenreList(GenreDTO genre) {
-        return genreRepository = genreRepository.findById()
-
-        return authorRepository.findById(authorId)
-                .map(Author::toDTO)
-                .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Author %s not found".formatted(authorId)));
-        findById(book.getPublisherId())
-    }*/
 }

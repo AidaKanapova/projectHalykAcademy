@@ -50,29 +50,19 @@ public class AuthorController  {
         return  authorService.addAuthor(author);
     }
 
-    @DeleteMapping("/deleteAuthor/{id}")
-    public Author deleteAuthor(@PathVariable("id") long authorId) {
-        Author author = null;
-        try {
-            author = authorService.deleteAuthor(authorId);
-        } catch (Exception ex) {
-            ex.getMessage();
+    @PutMapping("/updateAuthor/{id}")
+    public AuthorDTO updateAuthor(@RequestBody SaveAuthorDTO authorDTO,@PathVariable long id){
+        return authorService.updateAuthor(authorDTO,id);
+    }
 
-        }
-        return author;
+    @DeleteMapping("/deleteAuthor/{id}")
+    public void deleteAuthor(@PathVariable("id") long authorId) throws Exception {
+        authorService.deleteAuthor(authorId);
     }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Author>> findByName(@PathVariable("name") String name) {
-        List<Author> authors = null;
-        try {
-            authors = authorService.findByName(name);
-        } catch (Exception ex) {
-            ex.getMessage();
-
-        }
-        return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
-
+    public List<AuthorDTO> findByName(@PathVariable("name") String name) {
+        return authorService.findByName(name);
     }
 
     @PutMapping("/{authorId}/books/{bookId}")
@@ -90,9 +80,6 @@ public class AuthorController  {
         for (Long id:genreId) {
             genreList.add(genreRepository.findById(id).get().getGenre_name());
         }
-
-
-
 
         return new ResponseEntity<List<String>>(genreList,HttpStatus.OK);
 

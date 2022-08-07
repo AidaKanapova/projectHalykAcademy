@@ -38,15 +38,25 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO addGenre(SaveGenreDTO genre) {
+    public GenreDTO addGenre(GenreDTO genre) {
         Genre saved = genreRepository.save(
                 new Genre(
                         genre.getGenre_id(),
-                        genre.getGenre_name(),
-                        null
+                        genre.getGenre_name()
+
                 )
         );
         return  saved.toDTO();
+    }
+
+    @Override
+    public GenreDTO updateGenre(GenreDTO genreDTO, long id) {
+        Genre genre = genreRepository.findById(id).get();
+                new Genre(
+                        genre.getGenre_id(),
+                        genreDTO.getGenre_name()
+        );
+                return genre.toDTO();
     }
 
 

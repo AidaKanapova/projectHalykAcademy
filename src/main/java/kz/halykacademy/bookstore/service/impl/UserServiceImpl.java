@@ -70,16 +70,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(long id, User user) {
-        Optional<User> retrievedUser=userRepository.findById(id);
-        if(retrievedUser==null)
-            try {
-                throw new Exception("User not found");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        userRepository.save(user);
-        return userRepository.findById(id).get();
+    public UserDTO updateUser(UserDTO userDTO,long id) {
+        User user = userRepository.findById(id).get();
+        User saveUser = userRepository.save(
+                new User(
+                        user.getUser_id(),
+                        userDTO.getLogin(),
+                        userDTO.getPassword(),
+                        user.getOrder(),
+                        userDTO.getRole(),
+                        userDTO.isBlocked()
+
+                )
+        );
+        return saveUser.userDTO();
     }
 
     @Override
@@ -88,8 +92,8 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
-    public Optional<User> findByLogin(String login){
+  /*  public Optional<User> findByLogin(String login){
         Optional<User> user = userRepository.findByLogin(login);
         return user;
-    }
+    }*/
 }

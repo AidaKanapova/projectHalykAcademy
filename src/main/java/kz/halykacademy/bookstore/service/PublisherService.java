@@ -9,10 +9,9 @@ public interface PublisherService {
     public List<PublisherDTO> getAllPublishers();
     public PublisherDTO getPublisherById(long publisherId) throws Throwable;
     public PublisherDTO addPublisher(PublisherDTO publisher);
-/*
-    public Publisher updatePublisher(Publisher publisher);
-*/
+    public PublisherDTO updatePublisher(PublisherDTO publisher, long id);
+
     public void deletePublisher(long publisherId) throws Exception;
 
-    public  List<Publisher> findByName(String name);
+    public  List<PublisherDTO> findByName(String name);
 }

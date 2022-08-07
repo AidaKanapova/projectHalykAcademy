@@ -9,12 +9,12 @@ public interface AuthorService {
     public List<AuthorDTO> findAll();
     public AuthorDTO getAuthorById(long authorId) throws  Throwable ;
     public AuthorDTO addAuthor(SaveAuthorDTO author);
-/*
-    public AuthorDTO updateAuthors(Author author);
-*/
-    public Author deleteAuthor(long authorId) throws Exception;
 
-    public  List<Author> findByName(String name);
+    public AuthorDTO updateAuthor(SaveAuthorDTO author, long id);
+
+    public void deleteAuthor(long authorId) throws Exception;
+
+    public  List<AuthorDTO> findByName(String name);
 
 /*
     public List<GenreNameDTO> getGenreList(long id);

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -65,8 +66,8 @@ public class BookServiceImpl implements BookService {
                         book.getPrice(),
                         null,
                         publisher,
-                        book.getPage_count(),
-                        book.getRelease_year(),
+                        book.getPageCount(),
+                        book.getReleaseYear(),
                         false
                 )
         );
@@ -123,7 +124,8 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<Books> findByTitle(String title) {
-        return (List<Books>) bookRepository.findByTitle(title);
+    public List<BookDTO> findByTitle(String title) {
+
+        return bookRepository.findByTitle(title).stream().map(Books::toDTO).toList();
     }
 }
