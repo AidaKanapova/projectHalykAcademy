@@ -3,18 +3,13 @@ package kz.halykacademy.bookstore.controller;
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.dto.UpdateBookDTO;
-import kz.halykacademy.bookstore.entity.Books;
-import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
-import kz.halykacademy.bookstore.repository.BookRepository;
+
 import kz.halykacademy.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
 import java.util.List;
-import java.util.function.Supplier;
 
 
 @RestController

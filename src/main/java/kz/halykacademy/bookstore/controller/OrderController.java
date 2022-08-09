@@ -3,20 +3,9 @@ package kz.halykacademy.bookstore.controller;
 
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
-import kz.halykacademy.bookstore.entity.Books;
-import kz.halykacademy.bookstore.entity.Order;
-import kz.halykacademy.bookstore.entity.User;
-import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
-import kz.halykacademy.bookstore.repository.BookRepository;
-import kz.halykacademy.bookstore.repository.OrderRepository;
-import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -57,6 +46,6 @@ public class OrderController {
 
     @PutMapping("/{orderId}/book/{bookId}")
     public OrderDTO addBookToOrder(@PathVariable long orderId, @PathVariable long bookId) {
-        return orderService.addBook(orderId,bookId);
+        return orderService.addBookToOrder(orderId,bookId);
     }
 }

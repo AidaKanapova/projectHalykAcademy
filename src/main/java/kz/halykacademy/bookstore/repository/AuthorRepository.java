@@ -16,17 +16,16 @@ public interface AuthorRepository extends JpaRepository<Author,Long> {
     @Query(value = "SELECT  u FROM Author u WHERE lower(u.full_name)  LIKE %?1% ")
     List<Author> findByName(String name);
 
-    @Query(value = " select distinct g.genre_id \n" +
-            "from public.author_book a \n" +
-            "join public.book_genre g \n" +
-            "on a.book_id = g.book_id \n" +
-            "where a.author_id = :authorId ",nativeQuery = true)
-    List<Long> genreList(long authorId);
+    @Query(value = """ 
+                    select distinct c.genre_name
+                                from public.author_book a\s
+                                join public.book_genre g\s
+                                on a.book_id = g.book_id\s
+                    			join genre c\s
+                    			on g.genre_id = c.genre_id
+                                where a.author_id = :authorId
+                    """, nativeQuery = true)
+    List<String> genreList(long authorId);
 
-    @Query(value = " select distinct g" +
-            "from public.author_book a \n" +
-            "join public.book_genre g \n" +
-            "on a.book_id = g.book_id \n" +
-            "where a.author_id = :authorId ",nativeQuery = true)
-    List<Genre> genres (long authorId);
+
 }

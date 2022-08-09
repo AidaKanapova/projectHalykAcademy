@@ -43,7 +43,6 @@ public class GenreServiceImpl implements GenreService {
                 new Genre(
                         genre.getGenre_id(),
                         genre.getGenre_name()
-
                 )
         );
         return  saved.toDTO();

@@ -17,7 +17,7 @@ public class AuthorDTO {
     private String full_name;
     private LocalDate date_of_birth;
     private Set<BookNameDTO> books;
-    private List<GenreNameDTO> genreList;
+    private List<String> genreList;
 }
 
 

@@ -71,7 +71,7 @@ public class Books {
         );
     }
 
-    public BookDTO toDTO() {
+   /* public BookDTO toDTO() {
 
         Set<AuthorNameDTO> authors = Set.of();
         if (this.authors != null)
@@ -94,6 +94,6 @@ public class Books {
                 this.deleted
 
         );
-    }
+    }*/
 }
 

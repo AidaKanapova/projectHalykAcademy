@@ -16,6 +16,9 @@ public interface AuthorService {
 
     public  List<AuthorDTO> findByName(String name);
 
+    public  AuthorDTO addBook(long authorId, long bookId);
+
+
 /*
     public List<GenreNameDTO> getGenreList(long id);
 */

@@ -6,49 +6,37 @@ import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
+import kz.halykacademy.bookstore.mapper.BookMapper;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.PublisherRepository;
 import kz.halykacademy.bookstore.service.BookService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
 
 
     private final BookRepository bookRepository;
     private  final PublisherRepository publisherRepository;
-
-    public BookServiceImpl(BookRepository bookRepository, PublisherRepository publisherRepository) {
-        this.bookRepository = bookRepository;
-        this.publisherRepository = publisherRepository;
-    }
-
-
+    private final BookMapper bookMapper;
 
     @Override
     public List<BookDTO> getAllBooks() {
         return bookRepository.findAll()
                 .stream()
-                .map(Books::toDTO)
+                .map(bookMapper::toDTO)
                 .toList();
     }
 
     @Override
     public BookDTO getBookById(long bookId) throws Throwable {
         return bookRepository.findById(bookId)
-                .map(Books::toDTO)
+                .map(bookMapper::toDTO)
                 .orElseThrow((Supplier<Throwable>) () ->
                         new ResourceNotFoundeException("Book %s not found".formatted(bookId)));
     }
@@ -71,7 +59,7 @@ public class BookServiceImpl implements BookService {
                         false
                 )
         );
-        return  saved.toDTO();
+        return  bookMapper.toDTO(saved);
     }
 
     @Override
@@ -100,19 +88,7 @@ public class BookServiceImpl implements BookService {
         );
 
 
-      return  saveBook.toDTO();
-
-
-       /* books.setBookId(book.getBookId()),
-        books.setTitle(book.getTitle()),
-        books.setPrice(book.getPrice()),
-        books.setPublisher(publisher.getName()),
-        books.setPage_count(book.getPage_count()),
-        books.setRelease_year(book.getRelease_year()),
-        books.setDeleted(book.isDeleted())
-        )
-
-        bookRepository.save(books);*/
+      return  bookMapper.toDTO(saveBook);
 
     }
 
@@ -126,6 +102,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDTO> findByTitle(String title) {
 
-        return bookRepository.findByTitle(title).stream().map(Books::toDTO).toList();
+        return bookRepository.findByTitle(title).stream().map(bookMapper::toDTO).toList();
     }
 }

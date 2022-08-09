@@ -45,52 +45,6 @@ public class Author {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Set<Books> books = new HashSet<>();
 
-    @OneToMany
-    private List<Genre> genreList;
-
-
-
-    public AuthorNameDTO toAuthorDTO(){
-
-
-        return new AuthorNameDTO(
-
-                this.authorId,
-                this.full_name
-        );
-    }
-
-    public AuthorDTO toDTO(){
-
-        Set<BookNameDTO> books = Set.of();
-        if(this.books != null)
-            books = this.books.stream().map(Books::toBookDTO).collect(Collectors.toSet());
-
-        List<GenreNameDTO> genres = List.of();
-        if(this.genreList != null)
-            genres = this.genreList.stream().map(Genre::toGenreDTO).collect(Collectors.toList());
-        return new AuthorDTO(
-                this.authorId,
-                this.full_name,
-                this.date_of_birth,
-                books,
-                genres
-        );
-    }
-
-   /* public AuthorGenreListDTO authorGenreDTO(){
-
-        List<GenreNameDTO> genres = List.of();
-        if(this.genreList != null)
-            genres = this.genreList.stream().map(Genre::toGenreDTO).collect(Collectors.toList());
-        return new AuthorGenreListDTO(
-                this.authorId,
-                this.full_name,
-                genres
-        );
-    }*/
-
-
 }
 
 

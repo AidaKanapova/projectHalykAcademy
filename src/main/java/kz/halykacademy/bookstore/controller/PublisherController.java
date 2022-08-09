@@ -1,13 +1,10 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.dto.GenreDTO;
 import kz.halykacademy.bookstore.dto.PublisherDTO;
-import kz.halykacademy.bookstore.entity.Books;
-import kz.halykacademy.bookstore.entity.Publisher;
+
 import kz.halykacademy.bookstore.service.PublisherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

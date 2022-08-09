@@ -1,7 +1,4 @@
 package kz.halykacademy.bookstore.service.impl;
-
-
-import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
 import kz.halykacademy.bookstore.entity.*;
@@ -10,16 +7,18 @@ import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.OrderRepository;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
+
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
 
@@ -27,11 +26,6 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, BookRepository bookRepository) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public List<OrderDTO> getAllOrders() {
@@ -78,10 +72,7 @@ public class OrderServiceImpl implements OrderService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userDetails.getAuthorities().contains(UserRole.ADMIN)) {
-
             Order order = orderRepository.findById(orderId).get();
-
-
             Order updateOrder = new Order(
                     order.getOrderId(),
                     order.getUser(),
@@ -90,25 +81,20 @@ public class OrderServiceImpl implements OrderService {
                     OrderStatus.valueOf(orderDTO.getStatus()),
                     order.getCreated()
             );
-
             return updateOrder.orderDTO();
-
 
         } else {
             throw new IllegalArgumentException("you cant change status of order");
         }
 
-
     }
 
     @Override
-    public OrderDTO addBook(long orderId, long bookId) {
+    public OrderDTO addBookToOrder(long orderId, long bookId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 
         long userId = userRepository.findByLogin(userDetails.getUsername()).get().getUser_id();  //id юзера который вошел
         long foundUserIdOnOrder = orderRepository.findById(orderId).get().getUser().getUser_id(); // id юзера в заказе
-
 
         if (userId == foundUserIdOnOrder && userDetails.getAuthorities().contains(UserRole.USER)) {
 
@@ -123,11 +109,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-        @Override
-        public void deleteOrder ( long orderId) throws Exception {
-
-            orderRepository.deleteById(orderId);
-        }
-
-
+    @Override
+    public void deleteOrder(long orderId) throws Exception {
+        orderRepository.deleteById(orderId);
     }
+
+
+}

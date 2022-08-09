@@ -1,11 +1,8 @@
 package kz.halykacademy.bookstore.controller;
 
 
-import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.GenreDTO;
-import kz.halykacademy.bookstore.dto.SaveGenreDTO;
-import kz.halykacademy.bookstore.dto.UpdateBookDTO;
-import kz.halykacademy.bookstore.entity.Genre;
+
 import kz.halykacademy.bookstore.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

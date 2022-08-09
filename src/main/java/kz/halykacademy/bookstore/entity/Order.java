@@ -6,6 +6,7 @@ import kz.halykacademy.bookstore.dto.BookNameDTO;
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.errors.CustomExceptionHandler;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
+import lombok.*;
 import org.apache.catalina.connector.Response;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "orders")
 public class Order {
 
@@ -67,65 +72,6 @@ public class Order {
 
     }
 
-    public Order(){super();}
-
-    public Order(long order_id, User user, List<Books> books, int sum, OrderStatus status, LocalDate created) {
-        this.orderId = order_id;
-        this.user = user;
-        this.books = books;
-        this.sum = sum;
-        this.status = status;
-        this.created = created;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setSum(int sum) {
-        this.sum = sum;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setBooks(List<Books> books) {
-        this.books = books;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
-
-
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public int getSum() {
-        return sum;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public List<Books> getBooks() {
-        return books;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public LocalDate getCreated() {
-        return created;
-    }
 
     public void addBook(Books addBooks) {
 

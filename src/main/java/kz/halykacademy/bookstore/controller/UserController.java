@@ -2,11 +2,9 @@ package kz.halykacademy.bookstore.controller;
 
 
 import kz.halykacademy.bookstore.dto.UserDTO;
-import kz.halykacademy.bookstore.entity.User;
-import kz.halykacademy.bookstore.repository.UserRepository;
+
 import kz.halykacademy.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

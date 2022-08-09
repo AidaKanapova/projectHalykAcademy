@@ -7,18 +7,16 @@ import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.repository.PublisherRepository;
 import kz.halykacademy.bookstore.service.PublisherService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 @Service
+@RequiredArgsConstructor
 public class PublisherServiceImpl implements PublisherService {
     private final PublisherRepository publisherRepository;
-
-    public PublisherServiceImpl(PublisherRepository publisherRepository) {
-        this.publisherRepository = publisherRepository;
-    }
 
     @Override
     public List<PublisherDTO> getAllPublishers() {
