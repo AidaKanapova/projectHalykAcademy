@@ -1,9 +1,6 @@
 package kz.halykacademy.bookstore.mapper;
 
-import kz.halykacademy.bookstore.dto.AuthorNameDTO;
-import kz.halykacademy.bookstore.dto.BookDTO;
-import kz.halykacademy.bookstore.dto.BookNameDTO;
-import kz.halykacademy.bookstore.dto.GenreNameDTO;
+import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Genre;
@@ -51,6 +48,18 @@ public class BookMapper {
                 book.getPage_count(),
                 book.getRelease_year(),
                 book.isDeleted()
+        );
+    }
+
+    public BookGenreDTO toGenreDTO(Books book){
+        Set<GenreNameDTO> genreNameDTOS = Set.of();
+        if (book.getGenres() != null)
+            genreNameDTOS = book.getGenres().stream().map(Genre::toGenreDTO).collect(Collectors.toSet());
+
+        return new BookGenreDTO(
+                book.getBookId(),
+                book.getTitle(),
+                genreNameDTOS
         );
     }
 

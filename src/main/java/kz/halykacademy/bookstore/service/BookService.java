@@ -21,7 +21,7 @@ public interface BookService {
 
     public  List<BookDTO> findByTitle(String title);
 
-    public  List<BookDTO> findByGenreList(String genreList);
+    public  List<BookGenreDTO> findByGenreList(List<String> genreList);
 
 
 

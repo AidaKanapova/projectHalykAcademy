@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.BookGenreDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
@@ -109,22 +110,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> findByTitle(String title) {
-
         return bookRepository.findByTitle(title).stream().map(bookMapper::toDTO).toList();
     }
 
     @Override
-    public List<BookDTO> findByGenreList(String genreList) {
-        /*Genre genreOnRequest = genreRepository.findByName(genreList);
-        List<Books> bookList = bookRepository.getBookList(genreOnRequest.getGenre_id());
-        return bookList.stream().map(bookMapper::toDTO).toList();*/
-
-/*
-        return  bookRepository.genreList(genreList).stream().map(bookMapper::toDTO).toList();
-*/
-        return bookRepository.genreList(genreList).stream().map(bookMapper::toDTO).toList();
-
-
-
+    public List<BookGenreDTO> findByGenreList(List<String> genreNameList) {
+       return bookRepository.genreList(genreNameList).stream().map(bookMapper::toGenreDTO).toList();
     }
 }

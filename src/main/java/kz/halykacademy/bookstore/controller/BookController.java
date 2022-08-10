@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.controller;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
+import kz.halykacademy.bookstore.dto.BookGenreDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 
@@ -52,7 +53,7 @@ public class BookController{
     }
 
     @GetMapping("/getByGenre/{genre}")
-    public  List<BookDTO> findBookByGenre(@PathVariable("genre") String genre){
+    public  List<BookGenreDTO> findBookByGenre(@PathVariable("genre") List<String> genre){
         return bookService.findByGenreList(genre);
     }
 
