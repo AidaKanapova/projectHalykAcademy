@@ -64,4 +64,9 @@ public class GenreServiceImpl implements GenreService {
         genreRepository.deleteById(genreId);
 
     }
+
+    @Override
+    public GenreDTO findBYName(String name) {
+        return genreRepository.findByName(name).toDTO();
+    }
 }

@@ -46,6 +46,11 @@ public class GenreController {
         genreService.deleteGenre(genreId);
 
     }
+
+    @GetMapping("/getByName/{name}")
+    public GenreDTO findByName(@PathVariable("name") String name){
+        return  genreService.findBYName(name);
+    }
 }
 
 

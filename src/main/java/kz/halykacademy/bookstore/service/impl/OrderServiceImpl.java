@@ -33,11 +33,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(long orderId) throws Throwable {
+    public OrderDTO getOrderById(long orderId)  {
         return orderRepository.findById(orderId)
                 .map(Order::orderDTO)
-                .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("order not founded".formatted(orderId)));
+                .orElseThrow(() ->
+                        new ResourceNotFoundeException("order not founded"));
     }
 
     @Override
@@ -72,7 +72,8 @@ public class OrderServiceImpl implements OrderService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (userDetails.getAuthorities().contains(UserRole.ADMIN)) {
-            Order order = orderRepository.findById(orderId).get();
+            Order order = orderRepository.findById(orderId).orElseThrow((Supplier<Throwable>) () ->
+                    new ResourceNotFoundeException("order not founded"));;
             Order updateOrder = new Order(
                     order.getOrderId(),
                     order.getUser(),
@@ -84,7 +85,8 @@ public class OrderServiceImpl implements OrderService {
             return updateOrder.orderDTO();
 
         } else {
-            throw new IllegalArgumentException("you cant change status of order");
+
+            throw new ResourceNotFoundeException("you cant change status of order");
         }
 
     }

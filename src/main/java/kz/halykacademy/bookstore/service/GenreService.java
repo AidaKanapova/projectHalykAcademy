@@ -13,5 +13,6 @@ public interface GenreService {
     public GenreDTO addGenre(GenreDTO genre);
     public GenreDTO updateGenre(GenreDTO genre, long id);
     public void deleteGenre(long genreId) throws Exception;
+    public GenreDTO findBYName(String name);
 
 }

@@ -51,6 +51,11 @@ public class BookController{
         return  bookService.findByTitle(title);
     }
 
+    @GetMapping("/getByGenre/{genre}")
+    public  List<BookDTO> findBookByGenre(@PathVariable("genre") String genre){
+        return bookService.findByGenreList(genre);
+    }
+
 
 }
 

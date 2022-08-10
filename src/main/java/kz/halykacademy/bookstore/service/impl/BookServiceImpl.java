@@ -4,16 +4,22 @@ import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
 import kz.halykacademy.bookstore.dto.UpdateBookDTO;
 import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.mapper.BookMapper;
 import kz.halykacademy.bookstore.repository.BookRepository;
+import kz.halykacademy.bookstore.repository.GenreRepository;
 import kz.halykacademy.bookstore.repository.PublisherRepository;
 import kz.halykacademy.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +29,9 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private  final PublisherRepository publisherRepository;
+    private  final GenreRepository genreRepository;
     private final BookMapper bookMapper;
+
 
     @Override
     public List<BookDTO> getAllBooks() {
@@ -103,5 +111,20 @@ public class BookServiceImpl implements BookService {
     public List<BookDTO> findByTitle(String title) {
 
         return bookRepository.findByTitle(title).stream().map(bookMapper::toDTO).toList();
+    }
+
+    @Override
+    public List<BookDTO> findByGenreList(String genreList) {
+        /*Genre genreOnRequest = genreRepository.findByName(genreList);
+        List<Books> bookList = bookRepository.getBookList(genreOnRequest.getGenre_id());
+        return bookList.stream().map(bookMapper::toDTO).toList();*/
+
+/*
+        return  bookRepository.genreList(genreList).stream().map(bookMapper::toDTO).toList();
+*/
+        return bookRepository.genreList(genreList).stream().map(bookMapper::toDTO).toList();
+
+
+
     }
 }

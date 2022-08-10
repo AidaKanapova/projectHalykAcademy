@@ -7,10 +7,12 @@ import kz.halykacademy.bookstore.dto.GenreNameDTO;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Genre;
+import kz.halykacademy.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookMapper {
     private final AuthorMapper authorMapper;
+    private final BookRepository bookRepository;
 
     public BookNameDTO toBookDTO(Books books) {
         return new BookNameDTO(
@@ -50,4 +53,6 @@ public class BookMapper {
                 book.isDeleted()
         );
     }
+
 }
+

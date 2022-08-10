@@ -1,8 +1,6 @@
 package kz.halykacademy.bookstore.service;
 
-import kz.halykacademy.bookstore.dto.BookDTO;
-import kz.halykacademy.bookstore.dto.SaveBookDTO;
-import kz.halykacademy.bookstore.dto.UpdateBookDTO;
+import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Books;
 import org.springframework.data.domain.Pageable;
 
@@ -22,6 +20,8 @@ public interface BookService {
     public void deleteBook(long bookId) throws Exception;
 
     public  List<BookDTO> findByTitle(String title);
+
+    public  List<BookDTO> findByGenreList(String genreList);
 
 
 
