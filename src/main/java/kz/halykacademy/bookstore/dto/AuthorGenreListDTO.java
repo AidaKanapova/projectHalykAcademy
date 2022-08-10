@@ -14,8 +14,7 @@ import java.util.Set;
 @Setter
 public class AuthorGenreListDTO {
 
-    private long authorId;
     private String full_name;
-    private List<GenreNameDTO> genreList;
+    private List<String> genreList;
 
 }

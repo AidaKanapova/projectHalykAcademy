@@ -1,7 +1,6 @@
 package kz.halykacademy.bookstore.service;
 
 import kz.halykacademy.bookstore.dto.*;
-import kz.halykacademy.bookstore.entity.Author;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ public interface AuthorService {
     public  List<AuthorDTO> findByName(String name);
 
     public  AuthorDTO addBook(long authorId, long bookId);
+    public List<AuthorGenreListDTO> findAuthorsByGenreList(List<String> genreList);
 
 
 /*

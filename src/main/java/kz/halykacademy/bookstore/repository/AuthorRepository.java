@@ -2,13 +2,12 @@ package kz.halykacademy.bookstore.repository;
 
 
 import kz.halykacademy.bookstore.entity.Author;
-import kz.halykacademy.bookstore.entity.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author,Long> {
@@ -26,6 +25,21 @@ public interface AuthorRepository extends JpaRepository<Author,Long> {
                                 where a.author_id = :authorId
                     """, nativeQuery = true)
     List<String> genreList(long authorId);
+
+    @Query(value = """
+ select distinct f.*
+                                from author_book a
+                                join book_genre g
+                                on a.book_id = g.book_id
+                    			join genre c
+                    			on g.genre_id = c.genre_id
+								join author f
+								on f.author_id = a.author_id
+                                where c.genre_name in (:genreList)
+""", nativeQuery = true)
+    List<Author> getAuthorByGenreList(@Param("genreList") List<String> genreList);
+
+
 
 
 }

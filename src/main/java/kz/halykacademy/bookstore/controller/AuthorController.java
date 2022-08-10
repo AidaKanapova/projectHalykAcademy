@@ -1,7 +1,6 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.dto.AuthorDTO;
-import kz.halykacademy.bookstore.dto.SaveAuthorDTO;
+import kz.halykacademy.bookstore.dto.*;
 
 import kz.halykacademy.bookstore.repository.AuthorRepository;
 import kz.halykacademy.bookstore.repository.GenreRepository;
@@ -73,6 +72,11 @@ public class AuthorController  {
         return null;
 
 
+    }
+
+    @GetMapping("/getByGenre/{genre}")
+    public  List<AuthorGenreListDTO> findAuthorsByGenreList(@PathVariable("genre") List<String> genres){
+        return authorService.findAuthorsByGenreList(genres);
     }
 
 

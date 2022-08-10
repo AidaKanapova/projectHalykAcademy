@@ -48,6 +48,7 @@ public class Books {
     private int price;
 
 
+
     @ManyToMany(mappedBy = "books")
     private Set<Author> authors = new HashSet<>();
 

@@ -1,8 +1,6 @@
 package kz.halykacademy.bookstore.mapper;
 
-import kz.halykacademy.bookstore.dto.AuthorDTO;
-import kz.halykacademy.bookstore.dto.AuthorNameDTO;
-import kz.halykacademy.bookstore.dto.BookNameDTO;
+import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
@@ -45,6 +43,15 @@ public class AuthorMapper {
                 genreList
         );
     }
+    public AuthorGenreListDTO toGenreDTO(Author author){
+        List<String> genreList = authorRepository.genreList(author.getAuthorId());
+
+        return new AuthorGenreListDTO(
+                author.getFull_name(),
+                genreList
+        );
+    }
+
 
 
 }

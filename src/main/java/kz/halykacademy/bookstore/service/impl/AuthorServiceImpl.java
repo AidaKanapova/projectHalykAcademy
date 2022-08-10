@@ -3,7 +3,6 @@ package kz.halykacademy.bookstore.service.impl;
 import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
-import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.mapper.AuthorMapper;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
@@ -15,10 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +94,11 @@ public class AuthorServiceImpl implements AuthorService {
         author.getBooks().add(books);
 
         return authorMapper.toDTO(authorRepository.save(author));
+    }
+
+    @Override
+    public List<AuthorGenreListDTO> findAuthorsByGenreList(List<String> genreList) {
+        return  authorRepository.getAuthorByGenreList(genreList).stream().map(authorMapper::toGenreDTO).toList();
     }
 
 
