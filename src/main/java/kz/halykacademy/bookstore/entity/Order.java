@@ -9,6 +9,8 @@ import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import lombok.*;
 import org.apache.catalina.connector.Response;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
@@ -24,12 +26,13 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name = "orders")
+
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private long orderId;
+    private Long orderId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -53,7 +56,9 @@ public class Order {
 
 
 
-    public OrderDTO orderDTO() {
+
+
+   /* public OrderDTO orderDTO() {
         List<BookNameDTO> books = List.of();
         if (this.books != null)
             books = this.books.stream().map(Books::toBookDTO).collect(Collectors.toList());
@@ -71,7 +76,7 @@ public class Order {
         );
 
     }
-
+*/
 
     public void addBook(Books addBooks) {
 

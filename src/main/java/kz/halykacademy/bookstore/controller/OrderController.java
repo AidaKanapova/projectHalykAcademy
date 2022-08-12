@@ -3,6 +3,7 @@ package kz.halykacademy.bookstore.controller;
 
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
+import kz.halykacademy.bookstore.dto.UpdateOrderDTO;
 import kz.halykacademy.bookstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping("/getById/{id}")
-    public OrderDTO geOrderById(@PathVariable("id") long orderId) throws Throwable {
+    public OrderDTO geOrderById(@PathVariable("id") Long orderId) throws Throwable {
         return orderService.getOrderById(orderId);
     }
 
@@ -31,21 +32,26 @@ public class OrderController {
         return  orderService.addOrder(orderDTO);
     }
 
-    @PostMapping("/updateOrder/{orderId}")
-    public OrderDTO updateOrder(@RequestBody SaveOrderDTO newOrder,
-                                           @PathVariable("orderId") long orderId) throws Throwable {
+    @PostMapping("/updateOrder")
+    public OrderDTO updateOrder(@RequestBody UpdateOrderDTO newOrder) throws Throwable {
 
-        return orderService.updateOrder(newOrder,orderId);
+        return orderService.updateOrderByUser(newOrder);
+    }
+
+    @PostMapping("/admin/updateOrder")
+    public OrderDTO updateOrderByAdmin(@RequestBody UpdateOrderDTO newOrder) throws Throwable {
+
+        return orderService.updateOrderByAdmin(newOrder);
     }
 
 
     @DeleteMapping("/delete/{id}")
-    public void deleteOrder(@PathVariable("id") long orderId) throws Exception {
+    public void deleteOrder(@PathVariable("id") Long orderId) throws Throwable {
         orderService.deleteOrder(orderId);
     }
 
     @PutMapping("/{orderId}/book/{bookId}")
-    public OrderDTO addBookToOrder(@PathVariable long orderId, @PathVariable long bookId) {
+    public OrderDTO addBookToOrder(@PathVariable Long orderId, @PathVariable Long bookId) {
         return orderService.addBookToOrder(orderId,bookId);
     }
 }

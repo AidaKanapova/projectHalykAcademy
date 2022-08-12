@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Setter
 public class OrderDTO {
 
-    private long order_id;
+    private Long order_id;
     private String user;
     private List<BookNameDTO> books;
     private int sum;
