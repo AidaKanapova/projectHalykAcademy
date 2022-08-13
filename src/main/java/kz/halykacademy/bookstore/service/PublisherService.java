@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface PublisherService {
     public List<PublisherDTO> getAllPublishers();
-    public PublisherDTO getPublisherById(long publisherId) throws Throwable;
+    public PublisherDTO getPublisherById(Long publisherId) throws Throwable;
     public PublisherDTO addPublisher(PublisherDTO publisher);
-    public PublisherDTO updatePublisher(PublisherDTO publisher, long id);
+    public PublisherDTO updatePublisher(PublisherDTO publisher) throws Throwable;
 
-    public void deletePublisher(long publisherId) throws Exception;
+    public void deletePublisher(Long publisherId) throws Throwable;
 
     public  List<PublisherDTO> findByName(String name);
 }

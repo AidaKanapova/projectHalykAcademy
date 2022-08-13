@@ -5,6 +5,7 @@ import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
+import kz.halykacademy.bookstore.mapper.PublisherMapper;
 import kz.halykacademy.bookstore.repository.PublisherRepository;
 import kz.halykacademy.bookstore.service.PublisherService;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +18,21 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class PublisherServiceImpl implements PublisherService {
     private final PublisherRepository publisherRepository;
+    private  final PublisherMapper publisherMapper;
 
     @Override
     public List<PublisherDTO> getAllPublishers() {
         return publisherRepository.findAll()
                 .stream()
-                .map(Publisher::toDTO)
+                .map(publisherMapper::toDTO)
                 .toList();    }
 
     @Override
-    public PublisherDTO getPublisherById(long publisherId) throws Throwable {
+    public PublisherDTO getPublisherById(Long publisherId) throws Throwable {
         return publisherRepository.findById(publisherId)
-                .map(Publisher::toDTO)
+                .map(publisherMapper::toDTO)
                 .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Publisher %s not found".formatted(publisherId)));
+                        new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherId)));
     }
 
     @Override
@@ -42,35 +44,33 @@ public class PublisherServiceImpl implements PublisherService {
                         null
                 )
         );
-        return  saved.toDTO();
+        return  publisherMapper.toDTO(saved);
     }
 
     @Override
-    public PublisherDTO updatePublisher(PublisherDTO publisherDTO, long id) {
-        Publisher publisher = publisherRepository.findById(id).get();
+    public PublisherDTO updatePublisher(PublisherDTO publisherDTO) throws Throwable {
+        Publisher publisher = publisherRepository.findById(publisherDTO.getPublisherId()).orElseThrow((Supplier<Throwable>) () ->
+                new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherDTO.getPublisherId())));
         Publisher updatePublisher = publisherRepository.save(
                 new Publisher(
-                        publisher.getPublisherId(),
+                        publisherDTO.getPublisherId(),
                         publisherDTO.getName(),
                         publisher.getBooks()
                 )
         );
-        return updatePublisher.toDTO();
+        return publisherMapper.toDTO(updatePublisher);
     }
 
-    /* @Override
-     public Publisher updatePublisher(Publisher publisher) {
-         return publisherRepository.save(publisher);
-     }
- */
     @Override
-    public void deletePublisher(long publisherId) throws Exception {
+    public void deletePublisher(Long publisherId) throws Throwable {
+        publisherRepository.findById(publisherId).orElseThrow((Supplier<Throwable>) () ->
+                new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherId)));
         publisherRepository.deleteById(publisherId);
 
     }
 
     @Override
     public List<PublisherDTO> findByName(String name) {
-        return  publisherRepository.findByName(name).stream().map(Publisher::toDTO).toList();
+        return  publisherRepository.findByName(name).stream().map(publisherMapper::toDTO).toList();
     }
 }
