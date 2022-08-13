@@ -50,8 +50,4 @@ public class OrderController {
         orderService.deleteOrder(orderId);
     }
 
-    @PutMapping("/{orderId}/book/{bookId}")
-    public OrderDTO addBookToOrder(@PathVariable Long orderId, @PathVariable Long bookId) {
-        return orderService.addBookToOrder(orderId,bookId);
-    }
 }

@@ -15,9 +15,6 @@ public interface OrderService {
     public OrderDTO addOrder(SaveOrderDTO orderDTO) throws Throwable;
     public OrderDTO updateOrderByAdmin( UpdateOrderDTO orderDTO) throws Throwable;
     public OrderDTO updateOrderByUser( UpdateOrderDTO orderDTO) throws Throwable;
-
-    public OrderDTO addBookToOrder(Long orderId, Long bookId) ;
-
     public void deleteOrder(Long orderId) throws Throwable;
 
 
