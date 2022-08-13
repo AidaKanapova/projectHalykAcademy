@@ -1,6 +1,8 @@
 package kz.halykacademy.bookstore.config;
 
+import kz.halykacademy.bookstore.errors.MyBasicAuthenticationEntryPoint;
 import kz.halykacademy.bookstore.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,31 +16,28 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class CustomSecurityConfiguration  {
+public class CustomSecurityConfiguration {
+
+    @Autowired
+    private MyBasicAuthenticationEntryPoint myBasicAuthenticationEntryPoint;
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
-        return new  UserDetailsImpl(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return new UserDetailsImpl(userRepository);
     }
 
-   @Bean
+    @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
-       return http.csrf().disable().authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/**").authenticated()
-               .antMatchers(HttpMethod.POST,"/orders/**").authenticated()
-               .antMatchers(HttpMethod.PUT,"/orders/**").authenticated()
-
-
-
-/*
-               .antMatchers(HttpMethod.PUT,"/orders/updateOrder/{userId}").access("@userSecurity.hasUserId(authentication,#userId)")
-*/
-
-
+                .antMatchers(HttpMethod.POST, "/orders/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/orders/**").authenticated()
                 .antMatchers( "/**").hasAuthority("ADMIN")
-                .and().httpBasic(Customizer.withDefaults()).build();
-    }
+                .and().formLogin()
+                .and().httpBasic().authenticationEntryPoint(myBasicAuthenticationEntryPoint);
+        return http.build();
 
+    }
 
 
 }
