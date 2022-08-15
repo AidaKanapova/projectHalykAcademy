@@ -149,6 +149,13 @@ public class OrderServiceImpl implements OrderService {
         if (Objects.equals(user.getId(), order.getUser().getId())) {
 
             if (order.getStatus().name().contains("CREATED")) {
+                List<Long> ids = order.getBooks().stream().map(Books::getId).toList();
+                Map<Long, Long> bookCount = ids.stream()
+                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+                for (Map.Entry<Long, Long> entry : bookCount.entrySet()) {
+                    stockRepository.updateCountAfterDelete(entry.getValue(), entry.getKey());
+                }
                 orderRepository.deleteById(orderId);
             } else throw new IllegalArgumentException("you can no longer delete the order");
 
@@ -190,6 +197,4 @@ public class OrderServiceImpl implements OrderService {
         }
         return sum;
     }
-
-
 }
