@@ -4,6 +4,7 @@ import kz.halykacademy.bookstore.entity.OrderStatus;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -11,9 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class SaveOrderDTO {
-
-    private long orderId;
-    private long userId;
-    private String status;
-
+    private Long id;
+    private List<Long> bookList;
 }

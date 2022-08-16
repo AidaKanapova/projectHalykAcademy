@@ -7,9 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -25,5 +23,4 @@ public class OrderDTO {
     private int sum;
     private String status;
 
-
-   }
+}

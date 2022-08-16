@@ -1,17 +1,17 @@
 package kz.halykacademy.bookstore.service;
 
 import kz.halykacademy.bookstore.dto.PublisherDTO;
-import kz.halykacademy.bookstore.entity.Publisher;
+import kz.halykacademy.bookstore.dto.SavePublisherDTO;
 
 import java.util.List;
 
 public interface PublisherService {
-    public List<PublisherDTO> getAllPublishers();
-    public PublisherDTO getPublisherById(Long publisherId) throws Throwable;
-    public PublisherDTO addPublisher(PublisherDTO publisher);
-    public PublisherDTO updatePublisher(PublisherDTO publisher) throws Throwable;
+    List<PublisherDTO> getAllPublishers();
+    PublisherDTO getPublisherById(Long publisherId) throws Throwable;
+    PublisherDTO addPublisher(SavePublisherDTO publisher);
+    PublisherDTO updatePublisher(PublisherDTO publisher) throws Throwable;
 
-    public void deletePublisher(Long publisherId) throws Throwable;
+    void deletePublisher(Long publisherId) throws Throwable;
 
-    public  List<PublisherDTO> findByName(String name);
+    List<PublisherDTO> findByName(String name);
 }

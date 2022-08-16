@@ -3,19 +3,15 @@ package kz.halykacademy.bookstore.controller;
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.BookGenreDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
-import kz.halykacademy.bookstore.dto.UpdateBookDTO;
-
 import kz.halykacademy.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/books")
+@RequestMapping("/api/v1/books")
 public class BookController{
 
     private final BookService bookService;
@@ -26,24 +22,23 @@ public class BookController{
     }
 
     @GetMapping("/getById/{id}")
-    public BookDTO getBookById(@PathVariable("id") long bookId) throws Throwable {
+    public BookDTO getBookById(@PathVariable("id") Long bookId) throws Throwable {
         return bookService.getBookById(bookId);
     }
 
     @PostMapping("/addBook")
     public BookDTO addBook(@RequestBody SaveBookDTO book) throws Throwable {
-        return  bookService.createBook(book);
+        return  bookService.addBook(book);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteBook(@PathVariable("id") long bookId) throws Exception {
+    public void deleteBook(@PathVariable("id") Long bookId) throws Throwable {
         bookService.deleteBook(bookId);
     }
 
-    @PutMapping("/updateBook/{id}")
-    public BookDTO updateBook(@RequestBody UpdateBookDTO bookDTO,
-                           @PathVariable long id) throws Throwable {
-       return  bookService.updateBook(bookDTO,id);
+    @PutMapping("/updateBook")
+    public BookDTO updateBook(@RequestBody SaveBookDTO bookDTO) throws Throwable {
+       return  bookService.updateBook(bookDTO);
     }
 
 

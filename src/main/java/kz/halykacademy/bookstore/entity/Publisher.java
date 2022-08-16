@@ -3,6 +3,12 @@ package kz.halykacademy.bookstore.entity;
 
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.PublisherDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,13 +18,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "publisher")
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@SQLDelete(sql = "update book set deleted = true where book_id = ?")
+@Where(clause = "deleted = false")
 public class Publisher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "publisher_id")
-    private  long publisherId;
+    private  Long id;
 
     @Column(name = "name")
     private  String name;
@@ -27,61 +38,9 @@ public class Publisher {
     @OneToMany(mappedBy = "publisher")
     private List<Books> books = new ArrayList<>();
 
-  /*  @Column(name = "deleted")
-    private boolean deleted = Boolean.FALSE;*/
+    @Column(name = "deleted")
+    private boolean deleted;
 
 
-    public PublisherDTO toDTO(){
-        return  new PublisherDTO(
-                this.publisherId,
-                this.name
-        );
-    }
 
-   public Publisher() {
-        super();
-    }
-
-    public Publisher(long publisherId, String name, List<Books> books) {
-        super();
-        this.publisherId = publisherId;
-        this.name = name;
-        this.books = books;
-    }
-
-    public void setPublisherId(long publisherId) {
-        this.publisherId = publisherId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setBooks(List<Books> books) {
-        this.books = books;
-    }
-
-/*
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-*/
-
-    public long getPublisherId() {
-        return publisherId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Books> getBooks() {
-        return books;
-    }
-
-/*
-    public boolean isDeleted() {
-        return deleted;
-    }
-*/
 }

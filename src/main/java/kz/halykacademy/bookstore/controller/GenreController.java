@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/genres")
+@RequestMapping("/api/v1/genres")
 public class GenreController {
 
     private final GenreService genreService;
@@ -24,7 +24,7 @@ public class GenreController {
     }
 
     @GetMapping("/getById/{id}")
-    public GenreDTO getGenreById(@PathVariable("id") long genreId) throws Throwable {
+    public GenreDTO getGenreById(@PathVariable("id") Long genreId) throws Throwable {
         return genreService.getGenreById(genreId);
 
     }
@@ -35,21 +35,21 @@ public class GenreController {
 
     }
 
-    @PutMapping("/updateGenre/{id}")
-    public GenreDTO updateBook(@RequestBody GenreDTO genreDTO,
-                              @PathVariable long id)  {
-        return  genreService.updateGenre(genreDTO,id);
+    @PutMapping("/updateGenre")
+    public GenreDTO updateBook(@RequestBody GenreDTO genreDTO) throws Throwable
+                               {
+        return  genreService.updateGenre(genreDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteGenre(@PathVariable("id") long genreId) throws Exception {
+    public void deleteGenre(@PathVariable("id") Long genreId) throws Throwable {
         genreService.deleteGenre(genreId);
 
     }
 
     @GetMapping("/getByName/{name}")
     public GenreDTO findByName(@PathVariable("name") String name){
-        return  genreService.findBYName(name);
+        return  genreService.findByName(name);
     }
 }
 

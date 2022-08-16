@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.config;
+package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.entity.User;
 import kz.halykacademy.bookstore.errors.AuthorizationException;

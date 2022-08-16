@@ -12,9 +12,8 @@ import java.util.List;
 @Setter
 public class SaveAuthorDTO {
 
-    private long authorId;
-    private String full_name;
-    private LocalDate date_of_birth;
+    private String fullName;
+    private LocalDate dateOfBirth;
 
 
 }

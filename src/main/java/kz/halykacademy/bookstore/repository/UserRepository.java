@@ -2,7 +2,6 @@ package kz.halykacademy.bookstore.repository;
 
 import kz.halykacademy.bookstore.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -12,10 +11,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
 
-
-/*
-    User findByLogin(String login);
-*/
     Optional<User> findByLogin(String login);
+    boolean existsByLogin(String login);
+    boolean existsById(Long id);
+
+
 
 }

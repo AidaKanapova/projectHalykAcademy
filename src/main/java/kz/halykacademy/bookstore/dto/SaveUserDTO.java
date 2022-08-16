@@ -3,20 +3,17 @@ package kz.halykacademy.bookstore.dto;
 import kz.halykacademy.bookstore.entity.UserRole;
 import lombok.*;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
 
-    private Long id;
+public class SaveUserDTO  {
+
     private String login;
     private String password;
     private UserRole role;
-    private boolean blocked;
-}
 
+}
 

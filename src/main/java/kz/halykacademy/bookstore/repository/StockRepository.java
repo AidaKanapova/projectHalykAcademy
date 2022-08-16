@@ -14,7 +14,6 @@ import java.util.List;
 public interface StockRepository extends JpaRepository<Stock,Long> {
 
 
-
     @Query(value = "select b.bookCount from Stock b where b.book.id = :id ")
     int getBookCount(Long id);
 

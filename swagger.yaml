@@ -11,17 +11,17 @@ info:
 host: localhost:8080
 basePath: /
 tags:
-  - name: author-controller
+  - name: author
     description: Author Controller
-  - name: book-controller
+  - name: book
     description: Book Controller
-  - name: genre-controller
+  - name: genre
     description: Genre Controller
-  - name: order-controller
+  - name: order
     description: Order Controller
-  - name: publisher-controller
+  - name: publisher
     description: Publisher Controller
-  - name: user-controller
+  - name: user
     description: User Controller
   - name: basic-error-controller
     description: Basic Error Controller
@@ -29,7 +29,7 @@ paths:
   /authors/addAuthor:
     post:
       tags:
-        - author-controller
+        - author
       summary: addAuthor
       operationId: addAuthorUsingPOST
       consumes:
@@ -60,7 +60,7 @@ paths:
   /authors/allAuthors:
     get:
       tags:
-        - author-controller
+        - author
       summary: findAll
       operationId: findAllUsingGET
       produces:
@@ -82,7 +82,7 @@ paths:
   /authors/deleteAuthor/{id}:
     delete:
       tags:
-        - author-controller
+        - author
       summary: deleteAuthor
       operationId: deleteAuthorUsingDELETE
       produces:
@@ -107,7 +107,7 @@ paths:
   /authors/findByName/{name}:
     get:
       tags:
-        - author-controller
+        - author
       summary: findByName
       operationId: findByNameUsingGET
       produces:
@@ -135,7 +135,7 @@ paths:
   /authors/getByGenres/{genre}:
     get:
       tags:
-        - author-controller
+        - author
       summary: findAuthorsByGenreList
       operationId: findAuthorsByGenreListUsingGET
       produces:
@@ -163,7 +163,7 @@ paths:
   /authors/getById/{id}:
     get:
       tags:
-        - author-controller
+        - author
       summary: getAuthorById
       operationId: getAuthorByIdUsingGET
       produces:
@@ -190,7 +190,7 @@ paths:
   /authors/updateAuthor:
     put:
       tags:
-        - author-controller
+        - author
       summary: updateAuthor
       operationId: updateAuthorUsingPUT
       consumes:
@@ -221,7 +221,7 @@ paths:
   /authors/{authorId}/books/{id}:
     put:
       tags:
-        - author-controller
+        - author
       summary: author
       operationId: authorUsingPUT
       consumes:
@@ -258,7 +258,7 @@ paths:
   /books/addBook:
     post:
       tags:
-        - book-controller
+        - book
       summary: addBook
       operationId: addBookUsingPOST
       consumes:
@@ -289,7 +289,7 @@ paths:
   /books/allBooks:
     get:
       tags:
-        - book-controller
+        - book
       summary: getAllBooks
       operationId: getAllBooksUsingGET
       produces:
@@ -311,7 +311,7 @@ paths:
   /books/delete/{id}:
     delete:
       tags:
-        - book-controller
+        - book
       summary: deleteBook
       operationId: deleteBookUsingDELETE
       produces:
@@ -336,7 +336,7 @@ paths:
   /books/findByTitle/{title}:
     get:
       tags:
-        - book-controller
+        - book
       summary: findByTitle
       operationId: findByTitleUsingGET
       produces:
@@ -364,7 +364,7 @@ paths:
   /books/getByGenre/{genre}:
     get:
       tags:
-        - book-controller
+        - book
       summary: findBookByGenre
       operationId: findBookByGenreUsingGET
       produces:
@@ -392,7 +392,7 @@ paths:
   /books/getById/{id}:
     get:
       tags:
-        - book-controller
+        - book
       summary: getBookById
       operationId: getBookByIdUsingGET
       produces:
@@ -419,7 +419,7 @@ paths:
   /books/updateBook:
     put:
       tags:
-        - book-controller
+        - book
       summary: updateBook
       operationId: updateBookUsingPUT
       consumes:
@@ -612,7 +612,7 @@ paths:
   /genres/addGenre:
     post:
       tags:
-        - genre-controller
+        - genre
       summary: addGenre
       operationId: addGenreUsingPOST
       consumes:
@@ -643,7 +643,7 @@ paths:
   /genres/allGenres:
     get:
       tags:
-        - genre-controller
+        - genre
       summary: getAllGenres
       operationId: getAllGenresUsingGET
       produces:
@@ -665,7 +665,7 @@ paths:
   /genres/delete/{id}:
     delete:
       tags:
-        - genre-controller
+        - genre
       summary: deleteGenre
       operationId: deleteGenreUsingDELETE
       produces:
@@ -690,7 +690,7 @@ paths:
   /genres/getById/{id}:
     get:
       tags:
-        - genre-controller
+        - genre
       summary: getGenreById
       operationId: getGenreByIdUsingGET
       produces:
@@ -717,7 +717,7 @@ paths:
   /genres/getByName/{name}:
     get:
       tags:
-        - genre-controller
+        - genre
       summary: findByName
       operationId: findByNameUsingGET_1
       produces:
@@ -743,7 +743,7 @@ paths:
   /genres/updateGenre:
     put:
       tags:
-        - genre-controller
+        - genre
       summary: updateBook
       operationId: updateBookUsingPUT_1
       consumes:
@@ -774,7 +774,7 @@ paths:
   /orders/addOrder:
     post:
       tags:
-        - order-controller
+        - order
       summary: addOrder
       operationId: addOrderUsingPOST
       consumes:
@@ -805,7 +805,7 @@ paths:
   /orders/admin/updateOrder:
     post:
       tags:
-        - order-controller
+        - order
       summary: updateOrderByAdmin
       operationId: updateOrderByAdminUsingPOST
       consumes:
@@ -836,7 +836,7 @@ paths:
   /orders/allOrders:
     get:
       tags:
-        - order-controller
+        - order
       summary: getAllOrders
       operationId: getAllOrdersUsingGET
       produces:
@@ -858,7 +858,7 @@ paths:
   /orders/delete/{id}:
     delete:
       tags:
-        - order-controller
+        - order
       summary: deleteOrder
       operationId: deleteOrderUsingDELETE
       produces:
@@ -883,7 +883,7 @@ paths:
   /orders/getById/{id}:
     get:
       tags:
-        - order-controller
+        - order
       summary: geOrderById
       operationId: geOrderByIdUsingGET
       produces:
@@ -910,7 +910,7 @@ paths:
   /orders/updateOrder:
     post:
       tags:
-        - order-controller
+        - order
       summary: updateOrder
       operationId: updateOrderUsingPOST
       consumes:
@@ -941,7 +941,7 @@ paths:
   /publishers/addPublisher:
     post:
       tags:
-        - publisher-controller
+        - publisher
       summary: addPublisher
       operationId: addPublisherUsingPOST
       consumes:
@@ -972,7 +972,7 @@ paths:
   /publishers/allPublishers:
     get:
       tags:
-        - publisher-controller
+        - publisher
       summary: findAll
       operationId: findAllUsingGET_1
       produces:
@@ -994,7 +994,7 @@ paths:
   /publishers/deletePublisher/{id}:
     delete:
       tags:
-        - publisher-controller
+        - publisher
       summary: deletePublisher
       operationId: deletePublisherUsingDELETE
       produces:
@@ -1019,7 +1019,7 @@ paths:
   /publishers/findByName/{name}:
     get:
       tags:
-        - publisher-controller
+        - publisher
       summary: findByName
       operationId: findByNameUsingGET_2
       produces:
@@ -1047,7 +1047,7 @@ paths:
   /publishers/getById/{id}:
     get:
       tags:
-        - publisher-controller
+        - publisher
       summary: getPublisherById
       operationId: getPublisherByIdUsingGET
       produces:
@@ -1074,7 +1074,7 @@ paths:
   /publishers/updatePublisher:
     put:
       tags:
-        - publisher-controller
+        - publisher
       summary: updateBook
       operationId: updateBookUsingPUT_2
       consumes:
@@ -1105,7 +1105,7 @@ paths:
   /users/addUser:
     post:
       tags:
-        - user-controller
+        - user
       summary: addBook
       operationId: addBookUsingPOST_1
       consumes:
@@ -1136,7 +1136,7 @@ paths:
   /users/allUsers:
     get:
       tags:
-        - user-controller
+        - user
       summary: getAllUsers
       operationId: getAllUsersUsingGET
       produces:
@@ -1158,7 +1158,7 @@ paths:
   /users/delete/{id}:
     delete:
       tags:
-        - user-controller
+        - user
       summary: deleteBook
       operationId: deleteBookUsingDELETE_1
       produces:
@@ -1183,7 +1183,7 @@ paths:
   /users/getById/{id}:
     get:
       tags:
-        - user-controller
+        - user
       summary: geUserById
       operationId: geUserByIdUsingGET
       produces:
@@ -1210,7 +1210,7 @@ paths:
   /users/updateUser:
     put:
       tags:
-        - user-controller
+        - user
       summary: updateUser
       operationId: updateUserUsingPUT
       consumes:

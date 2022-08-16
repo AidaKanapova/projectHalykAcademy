@@ -2,20 +2,10 @@ package kz.halykacademy.bookstore.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kz.halykacademy.bookstore.dto.BookNameDTO;
-import kz.halykacademy.bookstore.dto.OrderDTO;
-import kz.halykacademy.bookstore.errors.CustomExceptionHandler;
-import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import lombok.*;
-import org.apache.catalina.connector.Response;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-import org.springframework.http.ResponseEntity;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +35,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Books> books = new ArrayList<>();
+
 
     private int sum;
 

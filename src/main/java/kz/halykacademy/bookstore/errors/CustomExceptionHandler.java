@@ -1,12 +1,9 @@
 package kz.halykacademy.bookstore.errors;
 
-import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
@@ -22,8 +19,21 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleNotFound(ResourceNotFoundeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MyError(ex.getMessage(), LocalDateTime.now()));
     }
-}
 
+    @ExceptionHandler(value = AuthorizationException.class)
+    protected ResponseEntity<Object> handleException(AuthorizationException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError("not allowed", LocalDateTime.now()));
+    }
+    @ExceptionHandler(value = InvalidValueException.class)
+    protected ResponseEntity<Object> handleException(InvalidValueException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MyError(ex.getMessage(), LocalDateTime.now()));
+    }
+    @ExceptionHandler(value = NotAllowedToOrderModificationException.class)
+    protected ResponseEntity<Object> handleException(NotAllowedToOrderModificationException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(ex.getMessage(), LocalDateTime.now()));
+    }
+
+}
 class MyError {
     private String message;
     private LocalDateTime timestamp;

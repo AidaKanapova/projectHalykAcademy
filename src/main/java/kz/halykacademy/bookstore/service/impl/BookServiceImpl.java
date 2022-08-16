@@ -1,14 +1,15 @@
 package kz.halykacademy.bookstore.service.impl;
-
 import kz.halykacademy.bookstore.dto.BookDTO;
 import kz.halykacademy.bookstore.dto.BookGenreDTO;
 import kz.halykacademy.bookstore.dto.SaveBookDTO;
-import kz.halykacademy.bookstore.dto.UpdateBookDTO;
+import kz.halykacademy.bookstore.entity.Author;
 import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.entity.Genre;
 import kz.halykacademy.bookstore.entity.Publisher;
+import kz.halykacademy.bookstore.errors.InvalidValueException;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.mapper.BookMapper;
+import kz.halykacademy.bookstore.repository.AuthorRepository;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.GenreRepository;
 import kz.halykacademy.bookstore.repository.PublisherRepository;
@@ -16,23 +17,21 @@ import kz.halykacademy.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
 
-
     private final BookRepository bookRepository;
-    private  final PublisherRepository publisherRepository;
-    private  final GenreRepository genreRepository;
+    private final PublisherRepository publisherRepository;
+    private final GenreRepository genreRepository;
+    private final AuthorRepository authorRepository;
     private final BookMapper bookMapper;
-
 
     @Override
     public List<BookDTO> getAllBooks() {
@@ -43,68 +42,87 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBookById(long bookId) throws Throwable {
+    public BookDTO getBookById(Long bookId) throws Throwable {
         return bookRepository.findById(bookId)
                 .map(bookMapper::toDTO)
                 .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Book %s not found".formatted(bookId)));
+                        new ResourceNotFoundeException("Book with id %s not found".formatted(bookId)));
     }
+
     @Override
-    public BookDTO createBook(SaveBookDTO book) throws  Throwable {
+    public BookDTO addBook(SaveBookDTO book) throws Throwable {
         Publisher publisher = publisherRepository.findById(book.getPublisherId())
                 .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Cannot persist book %s".formatted(book.getBookId())));
+                        new ResourceNotFoundeException("publisher with id %s not founded".formatted(book.getPublisherId())));
 
-        Books saved = bookRepository.save(
+
+        Set<Author> authorsList = authorRepository.getAuthorsByListId(book.getAuthorList());
+        Set<Genre> genreList = genreRepository.getGenresByListId(book.getGenreList());
+
+        if (authorsList.isEmpty()) {
+            throw  new InvalidValueException("incorrect list of authors");
+        }
+        if (genreList.isEmpty()) {
+            throw  new InvalidValueException("incorrect list of genres");
+        }
+
+        Books saveBook = bookRepository.save(
                 new Books(
-                        book.getBookId(),
+                        null,
                         book.getTitle(),
-                        null,
+                        genreList,
                         book.getPrice(),
-                        null,
+                        authorsList,
                         publisher,
                         book.getPageCount(),
                         book.getReleaseYear(),
                         false
                 )
         );
-        return  bookMapper.toDTO(saved);
+        return bookMapper.toDTO(saveBook);
     }
 
     @Override
-    public BookDTO updateBook(UpdateBookDTO book, long id) throws Throwable {
+    public BookDTO updateBook(SaveBookDTO book) throws Throwable {
 
-
-       /*Publisher publisher = publisherRepository.findById(book.getPublisherId())
+        Publisher publisher = publisherRepository.findById(book.getPublisherId())
                 .orElseThrow((Supplier<Throwable>) () ->
-                        new ResourceNotFoundeException("Cannot persist book %s".formatted(id)));*/
+                        new ResourceNotFoundeException("publisher with id %s not found".formatted(book.getPublisherId())));
 
+        Books givenBooks = bookRepository.findById(book.getBookId()).orElseThrow((Supplier<Throwable>) () ->
+                new ResourceNotFoundeException("book with id %s not found".formatted(book.getBookId())));
+        Set<Genre> genreList = genreRepository.getGenresByListId(book.getGenreList());
+        Set<Author> authorsList = authorRepository.getAuthorsByListId(book.getAuthorList());
 
-        Books books = bookRepository.findById(id).get();
+        if (authorsList.isEmpty()) {
+            throw  new InvalidValueException("incorrect list of authors");
+        }
+        if (genreList.isEmpty()) {
+            throw  new InvalidValueException("incorrect list of genres");
+        }
 
-        Books saveBook = bookRepository.save(
+        Books updateBook = bookRepository.save(
                 new Books(
-                        books.getBookId(),
+                        book.getBookId(),
                         book.getTitle(),
-                        books.getGenres(),
+                        genreList,
                         book.getPrice(),
-                        books.getAuthors(),
-                        books.getPublisher(),
-                        book.getPage_count(),
-                        book.getRelease_year(),
-                        books.isDeleted()
+                        authorsList,
+                        publisher,
+                        book.getPageCount(),
+                        book.getReleaseYear(),
+                        givenBooks.isDeleted()
                 )
         );
-
-
-      return  bookMapper.toDTO(saveBook);
-
+        return bookMapper.toDTO(updateBook);
     }
 
 
     @Override
-    public void deleteBook(long bookId) throws Exception {
-        bookRepository.deleteById(bookId);
+    public void deleteBook(Long bookId) {
+        if (bookRepository.existsById(bookId)) {
+            bookRepository.deleteById(bookId);
+        } else throw new ResourceNotFoundeException("book with id %s not founded");
     }
 
 
@@ -115,6 +133,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookGenreDTO> findByGenreList(List<String> genreNameList) {
-       return bookRepository.genreList(genreNameList).stream().map(bookMapper::toGenreDTO).toList();
+        return bookRepository.genreList(genreNameList).stream().map(bookMapper::toGenreDTO).toList();
     }
 }

@@ -37,33 +37,34 @@ public class GenreServiceImpl implements GenreService {
     public GenreDTO addGenre(GenreDTO genre) {
         Genre saveGenre = genreRepository.saveAndFlush(
                 new Genre(
-                        genre.getGenre_id(),
-                        genre.getGenre_name()
+                        null,
+                        genre.getGenreName()
                 )
         );
         return genreMapper.toDTO(saveGenre);
     }
 
     @Override
-    public GenreDTO updateGenre(GenreDTO genreDTO) throws Throwable {
-        genreRepository.findById(genreDTO.getGenre_id()).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("genre with id  %s not found".formatted(genreDTO.getGenre_id())));
+    public GenreDTO updateGenre(GenreDTO genreDTO)  {
+        if(!genreRepository.existsById(genreDTO.getId())){
+            throw new ResourceNotFoundeException("genre with id  %s not found".formatted(genreDTO.getId()));
+
+        }
         Genre updateGenre = genreRepository.save(
                 new Genre(
-                        genreDTO.getGenre_id(),
-                        genreDTO.getGenre_name()
+                        genreDTO.getId(),
+                        genreDTO.getGenreName()
                 )
         );
         return genreMapper.toDTO(updateGenre);
     }
 
-
     @Override
-    public void deleteGenre(Long genreId) throws Throwable {
-        genreRepository.findById(genreId).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("genre with id  %s not found".formatted(genreId)));
+    public void deleteGenre(Long genreId) {
+        if(!genreRepository.existsById(genreId)){
+            throw new ResourceNotFoundeException("genre with id  %s not found".formatted(genreId));
+        }
         genreRepository.deleteById(genreId);
-
     }
 
     @Override

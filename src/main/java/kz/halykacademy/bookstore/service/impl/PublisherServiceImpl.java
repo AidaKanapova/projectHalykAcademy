@@ -1,8 +1,7 @@
 package kz.halykacademy.bookstore.service.impl;
 
 import kz.halykacademy.bookstore.dto.PublisherDTO;
-import kz.halykacademy.bookstore.entity.Author;
-import kz.halykacademy.bookstore.entity.Books;
+import kz.halykacademy.bookstore.dto.SavePublisherDTO;
 import kz.halykacademy.bookstore.entity.Publisher;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
 import kz.halykacademy.bookstore.mapper.PublisherMapper;
@@ -36,12 +35,13 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public PublisherDTO addPublisher(PublisherDTO publisher) {
+    public PublisherDTO addPublisher(SavePublisherDTO publisher) {
         Publisher saved = publisherRepository.save(
                 new Publisher(
-                        publisher.getPublisherId(),
+                        null,
                         publisher.getName(),
-                        null
+                        null,
+                        false
                 )
         );
         return  publisherMapper.toDTO(saved);
@@ -49,24 +49,26 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public PublisherDTO updatePublisher(PublisherDTO publisherDTO) throws Throwable {
-        Publisher publisher = publisherRepository.findById(publisherDTO.getPublisherId()).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherDTO.getPublisherId())));
+        Publisher publisher = publisherRepository.findById(publisherDTO.getId()).orElseThrow((Supplier<Throwable>) () ->
+                new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherDTO.getId())));
         Publisher updatePublisher = publisherRepository.save(
                 new Publisher(
-                        publisherDTO.getPublisherId(),
+                        publisherDTO.getId(),
                         publisherDTO.getName(),
-                        publisher.getBooks()
+                        publisher.getBooks(),
+                        publisher.isDeleted()
                 )
         );
         return publisherMapper.toDTO(updatePublisher);
     }
 
     @Override
-    public void deletePublisher(Long publisherId) throws Throwable {
-        publisherRepository.findById(publisherId).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherId)));
-        publisherRepository.deleteById(publisherId);
+    public void deletePublisher(Long publisherId) {
+        if(!publisherRepository.existsById(publisherId)){
+            throw new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherId));
 
+        }
+        publisherRepository.deleteById(publisherId);
     }
 
     @Override

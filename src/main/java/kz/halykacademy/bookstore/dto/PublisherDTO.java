@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 public class PublisherDTO {
 
-    private  long publisherId;
+    private  Long id;
     private  String name;
 
 }

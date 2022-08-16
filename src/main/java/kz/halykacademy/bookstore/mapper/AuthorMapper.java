@@ -2,7 +2,6 @@ package kz.halykacademy.bookstore.mapper;
 
 import kz.halykacademy.bookstore.dto.*;
 import kz.halykacademy.bookstore.entity.Author;
-import kz.halykacademy.bookstore.entity.Books;
 import kz.halykacademy.bookstore.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,12 +16,14 @@ public class AuthorMapper {
 
     private final AuthorRepository authorRepository;
 
+    private  final BookMapper bookMapper;
+
     public AuthorNameDTO toAuthorDTO(Author author) {
 
 
         return new AuthorNameDTO(
                 author.getAuthorId(),
-                author.getFull_name()
+                author.getFullName()
         );
     }
 
@@ -30,24 +31,25 @@ public class AuthorMapper {
 
         Set<BookNameDTO> books = Set.of();
         if (author.getBooks() != null)
-            books = author.getBooks().stream().map(Books::toBookDTO).collect(Collectors.toSet());
+            books = author.getBooks().stream().map(bookMapper::toBookDTO).collect(Collectors.toSet());
 
         List<String> genreList = authorRepository.genreList(author.getAuthorId());
 
 
         return new AuthorDTO(
                 author.getAuthorId(),
-                author.getFull_name(),
-                author.getDate_of_birth(),
+                author.getFullName(),
+                author.getDateOfBirth(),
                 books,
                 genreList
+
         );
     }
     public AuthorGenreListDTO toGenreDTO(Author author){
         List<String> genreList = authorRepository.genreList(author.getAuthorId());
 
         return new AuthorGenreListDTO(
-                author.getFull_name(),
+                author.getFullName(),
                 genreList
         );
     }

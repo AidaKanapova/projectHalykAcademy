@@ -1,17 +1,15 @@
 package kz.halykacademy.bookstore.service.impl;
 
+import kz.halykacademy.bookstore.dto.SaveUserDTO;
 import kz.halykacademy.bookstore.dto.UserDTO;
 import kz.halykacademy.bookstore.entity.User;
 import kz.halykacademy.bookstore.entity.UserRole;
-import kz.halykacademy.bookstore.errors.AuthorizationException;
+import kz.halykacademy.bookstore.errors.InvalidValueException;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
-import kz.halykacademy.bookstore.errors.UserAlreadyRegistered;
 import kz.halykacademy.bookstore.mapper.UserMapper;
 import kz.halykacademy.bookstore.repository.UserRepository;
 import kz.halykacademy.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
 
-  /*  @PostConstruct
+    @PostConstruct
     public  void init(){
         Optional<User> admin = userRepository.findByLogin("admin");
         if(admin.isEmpty()){
@@ -38,16 +36,15 @@ public class UserServiceImpl implements UserService {
                             encoder.encode("admin"),
                             null,
                             UserRole.ADMIN,
+                            false,
                             false
                     )
             );
         }
-    }*/
-
+    }
 
     @Override
     public List<UserDTO> getAllUsers() {
-
         return userRepository.findAll().stream().map(userMapper::toDTO).toList();
     }
 
@@ -59,20 +56,23 @@ public class UserServiceImpl implements UserService {
                         new ResourceNotFoundeException("user with id %s not founded".formatted(userId)));
     }
 
+
+
     @Override
-    public UserDTO addUser(UserDTO userDTO)  {
+    public UserDTO addUser(SaveUserDTO userDTO)  {
 
         if (userRepository.existsByLogin(userDTO.getLogin())) {
-            throw new IllegalArgumentException("user already exist");
+            throw new InvalidValueException("user already exist");
         }
 
         User saveUser = userRepository.saveAndFlush(
                 new User(
-                        userDTO.getUser_id(),
+                        null,
                         userDTO.getLogin(),
                         encoder.encode(userDTO.getPassword()),
                         null,
-                        UserRole.USER,
+                        userDTO.getRole(),
+                        false,
                         false
                 )
         );
@@ -82,27 +82,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO userDTO) throws Throwable {
-        User user = userRepository.findById(userDTO.getUser_id()).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("user with id %s not founded".formatted(userDTO.getUser_id())));
+        User user = userRepository.findById(userDTO.getId()).orElseThrow((Supplier<Throwable>) () ->
+                new ResourceNotFoundeException("user with id %s not founded".formatted(userDTO.getId())));
         User updateUser = userRepository.save(
                 new User(
-                        userDTO.getUser_id(),
+                        userDTO.getId(),
                         userDTO.getLogin(),
                         encoder.encode(userDTO.getPassword()),
                         user.getOrder(),
                         userDTO.getRole(),
-                        userDTO.isBlocked()
+                        userDTO.isBlocked(),
+                        user.isDeleted()
                 )
         );
         return userMapper.toDTO(updateUser);
     }
 
     @Override
-    public void deleteUser(Long userId) throws Throwable {
+    public void deleteUser(Long userId)  {
 
-        userRepository.findById(userId).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("user with id %s not founded".formatted(userId)));
-        userRepository.deleteById(userId);
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else throw new ResourceNotFoundeException("user with id %s not founded".formatted(userId));
     }
 
 }

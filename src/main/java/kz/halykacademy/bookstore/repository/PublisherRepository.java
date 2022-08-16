@@ -5,15 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Repository
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
-    @Query(value = "SELECT  u FROM Publisher u WHERE lower(u.name)  LIKE %?1% ")
+    @Query(value = "SELECT  u FROM Publisher u WHERE lower(u.name)  LIKE  CONCAT('%',lower(:name), '%')  ")
     List<Publisher> findByName(String name);
 
-/*
-    List<AuthorGenreDTO> getGenreList(AuthorDTO authorDTO) ;
-*/
+    boolean existsById(Long id);
 
 }

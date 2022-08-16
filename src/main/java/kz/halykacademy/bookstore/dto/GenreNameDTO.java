@@ -10,8 +10,5 @@ import java.util.Set;
 @Getter
 @Setter
 public class GenreNameDTO {
-
-    private String genre_name;
-
-
+    private String genreName;
 }

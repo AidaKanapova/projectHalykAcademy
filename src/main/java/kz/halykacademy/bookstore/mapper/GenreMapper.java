@@ -13,14 +13,14 @@ public class GenreMapper {
 
     public GenreDTO toDTO(Genre genre){
         return  new GenreDTO(
-                genre.getGenre_id(),
-                genre.getGenre_name()
+                genre.getId(),
+                genre.getGenreName()
         );
     }
 
     public GenreNameDTO toGenreDTO(Genre genre){
         return new GenreNameDTO(
-                genre.getGenre_name()
+                genre.getGenreName()
         );
     }
 }

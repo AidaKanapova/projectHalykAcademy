@@ -5,8 +5,8 @@ import kz.halykacademy.bookstore.dto.SaveOrderDTO;
 import kz.halykacademy.bookstore.dto.UpdateOrderByAdminDTO;
 import kz.halykacademy.bookstore.entity.*;
 import kz.halykacademy.bookstore.errors.InvalidValueException;
+import kz.halykacademy.bookstore.errors.NotAllowedToOrderModificationException;
 import kz.halykacademy.bookstore.errors.ResourceNotFoundeException;
-import kz.halykacademy.bookstore.mapper.BookMapper;
 import kz.halykacademy.bookstore.mapper.OrderMapper;
 import kz.halykacademy.bookstore.repository.BookRepository;
 import kz.halykacademy.bookstore.repository.OrderRepository;
@@ -34,7 +34,6 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final OrderMapper orderMapper;
-    private final BookMapper bookMapper;
     private final StockRepository stockRepository;
 
 
@@ -58,12 +57,12 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findByLogin(userDetails.getUsername()).orElseThrow((Supplier<Throwable>) () ->
                 new ResourceNotFoundeException("user not founded"));
 
-        List<Books> books = checkOrder(orderDTO);
-        int sum = checkSum(books, orderDTO);
+        List<Books> books = checkBooks(orderDTO);
+        int sum = checkSumAndStock(books, orderDTO);
 
         Order saveOrder = orderRepository.saveAndFlush(
                 new Order(
-                        orderDTO.getId(),
+                        null,
                         user,
                         books,
                         sum,
@@ -84,15 +83,15 @@ public class OrderServiceImpl implements OrderService {
 
         User user = userRepository.findById(orderDTO.getUserId()).orElseThrow((Supplier<Throwable>) () ->
                 new ResourceNotFoundeException("user with id %s not founded".formatted(orderDTO.getUserId())));
-        if (!userDetails.getAuthorities().contains(UserRole.ADMIN)) {
+        /*if (!userDetails.getAuthorities().contains(UserRole.ADMIN)) {
             throw new IllegalArgumentException("you are not allowed to change status of the order");
-        }
+        }*/
         if (user.isBlocked()) {
             throw new InvalidValueException("user with id %s blocked".formatted(orderDTO.getUserId()));
         }
         Order updateOrderStatus = orderRepository.saveAndFlush(
                 new Order(
-                        order.getOrderId(),
+                        orderDTO.getOrderId(),
                         order.getUser(),
                         order.getBooks(),
                         order.getSum(),
@@ -108,7 +107,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO updateOrderByUser(SaveOrderDTO orderDTO) throws Throwable {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-
         User user = userRepository.findByLogin(userDetails.getUsername()).orElseThrow((Supplier<Throwable>) () ->
                 new ResourceNotFoundeException("you need to log in"));
         Order order = orderRepository.findById(orderDTO.getId()).orElseThrow((Supplier<Throwable>) () ->
@@ -117,8 +115,9 @@ public class OrderServiceImpl implements OrderService {
         if (Objects.equals(user.getId(), order.getUser().getId())) {
             if (order.getStatus().name().contains("CREATED")) {
 
-                List<Books> books = checkOrder(orderDTO);
-                int sum = checkSum(books, orderDTO);
+                List<Books> books = checkBooks(orderDTO);
+                int sum = checkSumAndStock(books, orderDTO);
+                updateStock(order);
 
                 Order updateOrderList = orderRepository.saveAndFlush(
                         new Order(
@@ -132,8 +131,8 @@ public class OrderServiceImpl implements OrderService {
                 );
                 return orderMapper.toDTO(updateOrderList);
             } else
-                throw new InvalidValueException("status of the order %s. you are no longer allowed to change the order".formatted(order.getStatus()));
-        } else throw new IllegalArgumentException("its not your order");
+                throw new NotAllowedToOrderModificationException("status of the order %s. you are no longer allowed to change the order".formatted(order.getStatus()));
+        } else throw new NotAllowedToOrderModificationException("its not your order");
 
     }
 
@@ -143,26 +142,20 @@ public class OrderServiceImpl implements OrderService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository.findByLogin(userDetails.getUsername()).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("you need to log in"));
+                new NotAllowedToOrderModificationException("you need to log in"));
         Order order = orderRepository.findById(orderId).orElseThrow((Supplier<Throwable>) () ->
                 new ResourceNotFoundeException("order not founded"));
         if (Objects.equals(user.getId(), order.getUser().getId())) {
 
             if (order.getStatus().name().contains("CREATED")) {
-                List<Long> ids = order.getBooks().stream().map(Books::getId).toList();
-                Map<Long, Long> bookCount = ids.stream()
-                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-                for (Map.Entry<Long, Long> entry : bookCount.entrySet()) {
-                    stockRepository.updateCountAfterDelete(entry.getValue(), entry.getKey());
-                }
+                updateStock(order);
                 orderRepository.deleteById(orderId);
-            } else throw new IllegalArgumentException("you can no longer delete the order");
+            } else throw new NotAllowedToOrderModificationException("you can no longer delete the order");
 
-        } else throw new IllegalArgumentException("its not your order");
+        } else throw new NotAllowedToOrderModificationException("its not your order");
     }
 
-    private List<Books> checkOrder(SaveOrderDTO orderDTO) {
+    private List<Books> checkBooks(SaveOrderDTO orderDTO) {
         List<Books> books = orderDTO.getBookList().stream().map(bookRepository::getOne).toList();
 
         if (books.isEmpty()) {
@@ -176,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
         return books;
     }
 
-    private int checkSum(List<Books> books, SaveOrderDTO orderDTO) {
+    private int checkSumAndStock(List<Books> books, SaveOrderDTO orderDTO) {
         List<Integer> sumList = books.stream().map(Books::getPrice).toList();
 
         int sum = sumList.stream().mapToInt(a -> a).sum();
@@ -187,14 +180,23 @@ public class OrderServiceImpl implements OrderService {
         Map<Long, Long> bookCount = orderDTO.getBookList().stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        List<Long> count = bookCount.values().stream().toList();
         for (Map.Entry<Long, Long> entry : bookCount.entrySet()) {
-            if (stockRepository.getBookCount(entry.getKey()) - entry.getValue() < 0) {
-                throw new InvalidValueException("all books with id %s send".formatted(entry.getKey()));
+            int bookCountInStock = stockRepository.getBookCount(entry.getKey());
+            if (bookCountInStock - entry.getValue() < 0) {
+                throw new InvalidValueException("only %s book with id %s left in stock ".formatted(bookCountInStock,entry.getKey()));
             }
             stockRepository.updateCount(entry.getValue(), entry.getKey());
-
         }
         return sum;
+    }
+
+    private void updateStock(Order order){
+        List<Long> BookIds = order.getBooks().stream().map(Books::getId).toList();
+        Map<Long, Long> bookCount = BookIds.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        for (Map.Entry<Long, Long> entry : bookCount.entrySet()) {
+            stockRepository.updateCountAfterDelete(entry.getValue(), entry.getKey());
+        }
     }
 }

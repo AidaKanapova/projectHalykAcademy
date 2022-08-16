@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class PublisherMapper {
     public PublisherDTO toDTO(Publisher publisher){
         return  new PublisherDTO(
-                publisher.getPublisherId(),
+                publisher.getId(),
                 publisher.getName()
         );
     }

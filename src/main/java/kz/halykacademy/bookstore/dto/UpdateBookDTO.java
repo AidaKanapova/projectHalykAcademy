@@ -12,9 +12,11 @@ import java.time.LocalDate;
 @Setter
 public class UpdateBookDTO {
 
+    private Long id;
     private String title;
     private int price;
-    private int page_count;
-    private LocalDate release_year;
+    private int pageCount;
+    private Long publisherId;
+    private LocalDate releaseYear;
 
 }

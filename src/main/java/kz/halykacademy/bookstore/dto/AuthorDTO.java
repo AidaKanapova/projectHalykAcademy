@@ -13,9 +13,9 @@ import java.util.Set;
 @Setter
 public class AuthorDTO {
 
-    private long authorId;
-    private String full_name;
-    private LocalDate date_of_birth;
+    private Long id;
+    private String fullName;
+    private LocalDate dateOfBirth;
     private Set<BookNameDTO> books;
     private List<String> genreList;
 }

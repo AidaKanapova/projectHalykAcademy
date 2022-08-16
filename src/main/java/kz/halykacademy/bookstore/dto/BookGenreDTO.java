@@ -12,5 +12,5 @@ import java.util.Set;
 public class BookGenreDTO {
     private Long bookId;
     private String title;
-    public Set<GenreNameDTO> genreNameDTOS;
+    public Set<GenreNameDTO> genres;
 }

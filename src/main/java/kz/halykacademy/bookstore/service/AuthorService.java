@@ -5,26 +5,18 @@ import kz.halykacademy.bookstore.dto.*;
 import java.util.List;
 
 public interface AuthorService {
-    public List<AuthorDTO> findAll();
-    public AuthorDTO getAuthorById(long authorId) throws  Throwable ;
-    public AuthorDTO addAuthor(SaveAuthorDTO author);
+    List<AuthorDTO> findAll();
 
-    public AuthorDTO updateAuthor(SaveAuthorDTO author, long id);
+    AuthorDTO getAuthorById(Long authorId) throws Throwable;
 
-    public void deleteAuthor(long authorId) throws Exception;
+    AuthorDTO addAuthor(SaveAuthorDTO author);
 
-    public  List<AuthorDTO> findByName(String name);
+    AuthorDTO updateAuthor(UpdateAuthorDTO author) throws Throwable;
 
-    public  AuthorDTO addBook(long authorId, long bookId);
-    public List<AuthorGenreListDTO> findAuthorsByGenreList(List<String> genreList);
+    void deleteAuthor(Long authorId) throws Throwable;
 
+    List<AuthorDTO> findByName(String name);
 
-/*
-    public List<GenreNameDTO> getGenreList(long id);
-*/
-
-/*
-    public  List<AuthorGenreDTO> getGenreList(GenreNameDTO genre);
-*/
+    List<AuthorGenreListDTO> findAuthorsByGenreList(List<String> genreList);
 }
 

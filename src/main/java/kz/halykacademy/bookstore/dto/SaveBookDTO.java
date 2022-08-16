@@ -11,13 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 public class SaveBookDTO {
-    private long bookId;
+    private Long bookId;
     private String title;
     private int price;
-    private long publisherId;
+    private List<Long> authorList;
+    private List<Long> genreList;
     private int pageCount;
+    private Long publisherId;
     private LocalDate releaseYear;
-    private boolean deleted;
-
-
 }

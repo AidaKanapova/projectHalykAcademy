@@ -3,14 +3,14 @@ package kz.halykacademy.bookstore.controller;
 
 import kz.halykacademy.bookstore.dto.OrderDTO;
 import kz.halykacademy.bookstore.dto.SaveOrderDTO;
-import kz.halykacademy.bookstore.dto.UpdateOrderDTO;
+import kz.halykacademy.bookstore.dto.UpdateOrderByAdminDTO;
 import kz.halykacademy.bookstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -33,13 +33,13 @@ public class OrderController {
     }
 
     @PostMapping("/updateOrder")
-    public OrderDTO updateOrder(@RequestBody UpdateOrderDTO newOrder) throws Throwable {
+    public OrderDTO updateOrder(@RequestBody SaveOrderDTO newOrder) throws Throwable {
 
         return orderService.updateOrderByUser(newOrder);
     }
 
     @PostMapping("/admin/updateOrder")
-    public OrderDTO updateOrderByAdmin(@RequestBody UpdateOrderDTO newOrder) throws Throwable {
+    public OrderDTO updateOrderByAdmin(@RequestBody UpdateOrderByAdminDTO newOrder) throws Throwable {
 
         return orderService.updateOrderByAdmin(newOrder);
     }

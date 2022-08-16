@@ -7,12 +7,12 @@ import kz.halykacademy.bookstore.dto.UpdateOrderByAdminDTO;
 import java.util.List;
 
 public interface OrderService {
-    public List<OrderDTO> getAllOrders();
-    public OrderDTO getOrderById(Long orderId) throws Throwable;
-    public OrderDTO addOrder(SaveOrderDTO orderDTO) throws Throwable;
-    public OrderDTO updateOrderByAdmin( UpdateOrderByAdminDTO orderDTO) throws Throwable;
-    public OrderDTO updateOrderByUser( SaveOrderDTO orderDTO) throws Throwable;
-    public void deleteOrder(Long orderId) throws Throwable;
+    List<OrderDTO> getAllOrders();
+    OrderDTO getOrderById(Long orderId) throws Throwable;
+    OrderDTO addOrder(SaveOrderDTO orderDTO) throws Throwable;
+    OrderDTO updateOrderByAdmin( UpdateOrderByAdminDTO orderDTO) throws Throwable;
+    OrderDTO updateOrderByUser( SaveOrderDTO orderDTO) throws Throwable;
+    void deleteOrder(Long orderId) throws Throwable;
 
 
 
