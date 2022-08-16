@@ -32,13 +32,13 @@ public class OrderController {
         return  orderService.addOrder(orderDTO);
     }
 
-    @PostMapping("/updateOrder")
+    @PutMapping("/updateOrder")
     public OrderDTO updateOrder(@RequestBody SaveOrderDTO newOrder) throws Throwable {
 
         return orderService.updateOrderByUser(newOrder);
     }
 
-    @PostMapping("/admin/updateOrder")
+    @PutMapping("/updateOrderByAdmin")
     public OrderDTO updateOrderByAdmin(@RequestBody UpdateOrderByAdminDTO newOrder) throws Throwable {
 
         return orderService.updateOrderByAdmin(newOrder);

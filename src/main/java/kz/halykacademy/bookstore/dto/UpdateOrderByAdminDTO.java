@@ -10,7 +10,6 @@ import lombok.*;
 public class UpdateOrderByAdminDTO {
 
     private Long orderId;
-    private Long userId;
     private String status;
 
 }

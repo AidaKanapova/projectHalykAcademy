@@ -76,18 +76,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateOrderByAdmin(UpdateOrderByAdminDTO orderDTO) throws Throwable {
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         Order order = orderRepository.findById(orderDTO.getOrderId()).orElseThrow((Supplier<Throwable>) () ->
                 new ResourceNotFoundeException("order with id %s not founded".formatted(orderDTO.getOrderId())));
 
-        User user = userRepository.findById(orderDTO.getUserId()).orElseThrow((Supplier<Throwable>) () ->
-                new ResourceNotFoundeException("user with id %s not founded".formatted(orderDTO.getUserId())));
-        /*if (!userDetails.getAuthorities().contains(UserRole.ADMIN)) {
-            throw new IllegalArgumentException("you are not allowed to change status of the order");
-        }*/
+        User user = order.getUser();
+
         if (user.isBlocked()) {
-            throw new InvalidValueException("user with id %s blocked".formatted(orderDTO.getUserId()));
+            throw new InvalidValueException("user with id %s blocked".formatted(user.isBlocked()));
         }
         Order updateOrderStatus = orderRepository.saveAndFlush(
                 new Order(
