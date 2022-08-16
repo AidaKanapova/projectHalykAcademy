@@ -36,7 +36,7 @@ public class GenreController {
     }
 
     @PutMapping("/updateGenre")
-    public GenreDTO updateBook(@RequestBody GenreDTO genreDTO) throws Throwable
+    public GenreDTO updateGenre(@RequestBody GenreDTO genreDTO) throws Throwable
                                {
         return  genreService.updateGenre(genreDTO);
     }
