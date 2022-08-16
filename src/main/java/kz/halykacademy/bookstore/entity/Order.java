@@ -45,43 +45,6 @@ public class Order {
     @CreationTimestamp
     private LocalDate created;
 
-
-
-
-
-   /* public OrderDTO orderDTO() {
-        List<BookNameDTO> books = List.of();
-        if (this.books != null)
-            books = this.books.stream().map(Books::toBookDTO).collect(Collectors.toList());
-
-        List<Integer> sum = List.of();
-        if(this.books != null)
-        sum = this.books.stream().map(Books::getPrice).collect(Collectors.toList());
-        int summ = sum.stream().mapToInt(a ->a).sum();
-        return new OrderDTO(
-                this.orderId,
-                this.user.getLogin(),
-                books,
-                summ,
-                this.status.toString()
-        );
-
-    }
-*/
-
-    public void addBook(Books addBooks) {
-
-            List<Integer> sumList = List.of();
-            if (this.books != null)
-                sumList = this.books.stream().map(Books::getPrice).collect(Collectors.toList());
-            int sum = (sumList.stream().mapToInt(a -> a).sum()) + addBooks.getPrice();
-
-            if (sum < 10000) {
-                books.add(addBooks);
-            }else {
-                throw new IllegalArgumentException("Overprice");
-            }
-        }
 }
 
 

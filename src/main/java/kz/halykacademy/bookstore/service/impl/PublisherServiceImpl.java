@@ -38,7 +38,7 @@ public class PublisherServiceImpl implements PublisherService {
     public PublisherDTO addPublisher(SavePublisherDTO publisher) {
         Publisher saved = publisherRepository.save(
                 new Publisher(
-                        null,
+                        publisher.getId(),
                         publisher.getName(),
                         null,
                         false
@@ -66,7 +66,6 @@ public class PublisherServiceImpl implements PublisherService {
     public void deletePublisher(Long publisherId) {
         if(!publisherRepository.existsById(publisherId)){
             throw new ResourceNotFoundeException("Publisher with id %s not found".formatted(publisherId));
-
         }
         publisherRepository.deleteById(publisherId);
     }

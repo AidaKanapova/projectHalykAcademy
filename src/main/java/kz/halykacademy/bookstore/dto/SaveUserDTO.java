@@ -13,7 +13,6 @@ public class SaveUserDTO  {
 
     private String login;
     private String password;
-    private UserRole role;
 
 }
 

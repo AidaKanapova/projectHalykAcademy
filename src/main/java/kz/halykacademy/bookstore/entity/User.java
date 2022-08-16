@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@SQLDelete(sql = "update book set deleted = true where book_id = ?")
+@SQLDelete(sql = "update users set deleted = true where user_id = ?")
 @Where(clause = "deleted = false")
 public class User implements UserDetails {
 

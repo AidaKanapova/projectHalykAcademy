@@ -22,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@SQLDelete(sql = "update book set deleted = true where book_id = ?")
+@SQLDelete(sql = "update publisher set deleted = true where publisher_id = ?")
 @Where(clause = "deleted = false")
 public class Publisher {
 
@@ -40,7 +40,5 @@ public class Publisher {
 
     @Column(name = "deleted")
     private boolean deleted;
-
-
 
 }

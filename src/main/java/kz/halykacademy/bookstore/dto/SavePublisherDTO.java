@@ -8,5 +8,6 @@ import lombok.*;
 @Getter
 @Setter
 public class SavePublisherDTO {
+    private Long id;
     private  String name;
 }
