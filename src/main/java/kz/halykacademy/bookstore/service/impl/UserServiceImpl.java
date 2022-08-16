@@ -25,23 +25,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
 
-    @PostConstruct
-    public  void init(){
-        Optional<User> admin = userRepository.findByLogin("admin");
-        if(admin.isEmpty()){
-            userRepository.saveAndFlush(
-                    new User(
-                            null,
-                            "admin",
-                            encoder.encode("admin"),
-                            null,
-                            UserRole.ADMIN,
-                            false,
-                            false
-                    )
-            );
-        }
-    }
 
     @Override
     public List<UserDTO> getAllUsers() {
