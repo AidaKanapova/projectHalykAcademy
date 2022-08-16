@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public UserDTO addBook(@RequestBody SaveUserDTO userDTO) {
+    public UserDTO addUser(@RequestBody SaveUserDTO userDTO) {
         return  userService.addUser(userDTO);
     }
 
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteBook(@PathVariable("id") Long userId) throws Throwable {
+    public void deleteUser(@PathVariable("id") Long userId) throws Throwable {
         userService.deleteUser(userId);
     }
 }
