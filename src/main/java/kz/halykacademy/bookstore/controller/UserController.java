@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.controller;
 import kz.halykacademy.bookstore.dto.SaveUserDTO;
+import kz.halykacademy.bookstore.dto.UpdateUserByAdminDTO;
 import kz.halykacademy.bookstore.dto.UserDTO;
 import kz.halykacademy.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,12 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) throws Throwable{
-        return userService.updateUser(userDTO);
+    public UserDTO updateUserByUser(@RequestBody UserDTO userDTO) throws Throwable{
+        return userService.updateUserByUser(userDTO);
+    }
+    @PutMapping("/updateUserByAdmin")
+    public UserDTO updateUserByAdmin(@RequestBody UpdateUserByAdminDTO userDTO) throws Throwable{
+        return userService.updateUserByAdmin(userDTO);
     }
 
     @DeleteMapping("/delete/{id}")
